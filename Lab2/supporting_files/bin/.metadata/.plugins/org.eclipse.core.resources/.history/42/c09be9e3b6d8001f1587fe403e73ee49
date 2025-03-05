@@ -1,0 +1,38 @@
+package generic;
+
+import java.io.FileInputStream;
+import generic.Operand.OperandType;
+
+
+public class Simulator {
+		
+	static FileInputStream inputcodeStream = null;
+	
+	public static void setupSimulation(String assemblyProgramFile, String objectProgramFile)
+	{	
+		int firstCodeAddress = ParsedProgram.parseDataSection(assemblyProgramFile);
+		ParsedProgram.parseCodeSection(assemblyProgramFile, firstCodeAddress);
+		ParsedProgram.printState();
+	}
+	
+	public static void assemble()
+	{
+		System.out.println("\n\nThis is Simulator");
+//		System.out.println(ParsedProgram.symtab.get("palindrome"));
+//		System.out.println(ParsedProgram.getInstructionAt(2));
+		
+		System.out.println(ParsedProgram.firstCodeAddress);
+		
+		for(int i = 0; i < ParsedProgram.data.size(); i++)
+			System.out.println(ParsedProgram.data.get(i));
+		
+//		for(int i = 0; i < ParsedProgram.code.size(); i++)
+//			System.out.println(ParsedProgram.code.get(i));
+		
+		for(int i = 0; i < ParsedProgram.code.size(); i++) {
+			String operation = new String(ParsedProgram.code.get(i).operationType);
+			System.out.println(operation);
+		}
+	}
+	
+}
