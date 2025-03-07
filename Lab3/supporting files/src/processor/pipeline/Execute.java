@@ -19,7 +19,7 @@ public class Execute {
 
 	public void performEX() {
 		OF_EX_Latch.setEX_enable(false);
-		int result = 0, rem = 0;
+		// int result = 0, rem = 0;
 		int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
 
 		switch (OF_EX_Latch.operation) {
@@ -55,7 +55,7 @@ public class Execute {
 				EX_MA_Latch.setRemainder(op1 % op2);
 				EX_MA_Latch.setMaType(maType.rw);
 				EX_MA_Latch.rd = OF_EX_Latch.rd;
-				rem = op1 % op2;
+				// rem = op1 % op2;
 				break;
 			case "and":
 			case "andi":
