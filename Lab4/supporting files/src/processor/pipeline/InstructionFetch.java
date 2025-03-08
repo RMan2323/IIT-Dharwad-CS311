@@ -42,7 +42,7 @@ public class InstructionFetch {
 			EX_IF_Latch.setIF_enable(false);
 			IF_OF_Latch.setOF_enable(true);
 		}
-		IF_EnableLatch.setIF_enable(false);
+		// IF_EnableLatch.setIF_enable(false);
 	}
 
 }

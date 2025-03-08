@@ -18,19 +18,20 @@ public class RegisterWrite {
 
 	public void performRW() {
 		if (MA_RW_Latch.isRW_enable()) {
-			MA_RW_Latch.setRW_enable(false);
-			System.out.println("RW "+MA_RW_Latch.endProg);
+			// MA_RW_Latch.setRW_enable(false);
+			System.out.println("RW " + MA_RW_Latch.endProg);
 
 			if (MA_RW_Latch.endProg) {
 				Simulator.setSimulationComplete(true);
 				System.out.println("----\nENDING");
-			} else
+			} else {
 				containingProcessor.getRegisterFile().setValue(MA_RW_Latch.rd, MA_RW_Latch.res);
-				System.out.println("----\nPUTTING "+MA_RW_Latch.res+" in register "+MA_RW_Latch.rd);
+				System.out.println("----\nPUTTING " + MA_RW_Latch.res + " in register " + MA_RW_Latch.rd);
 				containingProcessor.getRegisterFile().setValue(31, MA_RW_Latch.rem);
-				System.out.println("----\nPUTTING "+MA_RW_Latch.rem+" in register 31");
+				System.out.println("----\nPUTTING " + MA_RW_Latch.rem + " in register 31");
 			}
-			IF_EnableLatch.setIF_enable(true);
+		}
+		// IF_EnableLatch.setIF_enable(true);
 	}
 
 }

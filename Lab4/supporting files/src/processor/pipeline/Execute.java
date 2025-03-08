@@ -18,7 +18,7 @@ public class Execute {
 	}
 
 	public void performEX() {
-		OF_EX_Latch.setEX_enable(false);
+		// OF_EX_Latch.setEX_enable(false);
 		// int result = 0, rem = 0;
 		int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
 

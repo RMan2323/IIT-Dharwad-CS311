@@ -202,7 +202,7 @@ public class OperandFetch {
 					break;
 			}
 			OF_EX_Latch.setOperation(operation);
-			IF_OF_Latch.setOF_enable(false);
+			// IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);
 		}
 	}

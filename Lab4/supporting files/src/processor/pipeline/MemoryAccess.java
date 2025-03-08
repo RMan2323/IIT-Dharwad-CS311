@@ -16,7 +16,7 @@ public class MemoryAccess {
 	public void performMA() {
 		if (EX_MA_Latch.isMA_enable()) {
 			System.out.println("Performing MA");
-			EX_MA_Latch.setMA_enable(false);
+			// EX_MA_Latch.setMA_enable(false);
 			if (EX_MA_Latch.endProg) {
 				MA_RW_Latch.setEndProg(true);
 				MA_RW_Latch.setRW_enable(true);
