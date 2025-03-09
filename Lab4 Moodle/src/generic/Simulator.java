@@ -83,6 +83,8 @@ public class Simulator {
 			processor.getOFUnit().performOF();
 			x++;
 			
+			processor.getDLUnit().insertBubbles();
+
 			System.out.println("v CYCLE "+x);
 			processor.getIFUnit().performIF();
 			x++;

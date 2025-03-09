@@ -3,19 +3,22 @@ package processor.pipeline;
 import processor.Processor;
 import processor.pipeline.RegisterFile;
 import java.util.HashMap;
+import processor.pipeline.DataLockUnit;
 
 @SuppressWarnings("unused")
 public class OperandFetch {
 	Processor containingProcessor;
+	DataLockUnit DLU;
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
 	HashMap<String, String> opcodes = new HashMap<String, String>();
 	HashMap<String, Integer> registers = new HashMap<String, Integer>();
 
-	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch) {
+	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch, DataLockUnit dLU) {
 		this.containingProcessor = containingProcessor;
 		this.IF_OF_Latch = iF_OF_Latch;
 		this.OF_EX_Latch = oF_EX_Latch;
+		this.DLU = dLU;
 
 		opcodes.put("00000", "add");
 		opcodes.put("00001", "addi");
@@ -54,7 +57,7 @@ public class OperandFetch {
 	}
 
 	public void performOF() {
-		if (IF_OF_Latch.isOF_enable()) {
+		if (IF_OF_Latch.isOF_enable() && DLU.stalls == 0) {
 			System.out.println("Performing OF!!!!!!");
 			
 			int instruction = IF_OF_Latch.getInstruction();
@@ -72,6 +75,7 @@ public class OperandFetch {
 
 			int imm1 = 0, imm2 = 0, imm3 = 0;
 
+			OF_EX_Latch.rs1 = op1;
 //			int currentPC = containingProcessor.getRegisterFile().getProgramCounter() - 1;
 			int currentPC = IF_OF_Latch.PC;
 //			System.out.println("\n\nPC: " + currentPC);
@@ -99,6 +103,7 @@ public class OperandFetch {
 					imm2 = (containingProcessor.getRegisterFile()).getValue(op2);
 
 					OF_EX_Latch.setImm(imm1, imm2);
+					OF_EX_Latch.rs2 = op2;
 
 					break;
 
@@ -123,12 +128,16 @@ public class OperandFetch {
 					imm1 = (containingProcessor.getRegisterFile()).getValue(op1);
 
 					OF_EX_Latch.setImm(imm1, op3);
+					OF_EX_Latch.rs2 = -1;
 
 					break;
 
 				// RI
 				case "jmp":
 					System.out.println("Jump instruction!");
+					OF_EX_Latch.rs1 = -1;
+					OF_EX_Latch.rs2 = -1;
+					OF_EX_Latch.rd = -1;
 					op2str = BinInstruction.substring(10, 32);
 					if (BinInstruction.charAt(10) == '1') {
 						op2str = "";
@@ -152,6 +161,10 @@ public class OperandFetch {
 					System.out.println("Branch instruction!");
 					op2str = BinInstruction.substring(10, 15);
 					op2 = registers.get(op2str); // register
+
+					OF_EX_Latch.rs2 = op2;
+					OF_EX_Latch.rd = -1;
+
 					op3str = BinInstruction.substring(15, 32);
 
 					if (BinInstruction.charAt(15) == '1') {
@@ -175,14 +188,21 @@ public class OperandFetch {
 					break;
 
 				case "end":
+					OF_EX_Latch.rs1 = -1;
+					OF_EX_Latch.rs2 = -1;
+					OF_EX_Latch.rd = -1;
 //					System.out.println(operation);
 					OF_EX_Latch.setImm(0, 0);
+
 					break;
 
 				case "load":
 					imm1 = (containingProcessor.getRegisterFile()).getValue(op1);
 					op2str = BinInstruction.substring(10, 15);
 					op2 = registers.get(op2str); // register
+
+					OF_EX_Latch.rs2 = -1;
+					OF_EX_Latch.rd = op2;
 
 					op3str = BinInstruction.substring(15, 32);
 					op3 = Integer.parseInt(op3str, 2);
@@ -200,16 +220,22 @@ public class OperandFetch {
 					op3str = BinInstruction.substring(15, 32);
 					op3 = Integer.parseInt(op3str, 2);
 
+					OF_EX_Latch.rd = -1;
+					OF_EX_Latch.rs2 = op2;
+
 					OF_EX_Latch.setImm(imm2 + op3, imm1);
 
 					break;
 				default:
 					break;
 			}
+			DLU.checkConflicts(OF_EX_Latch.rs1, OF_EX_Latch.rs2);
 			OF_EX_Latch.setOperation(operation);
 //			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);
 		}
+		else{
+			DLU.insertBubbles();
+		}
 	}
-
 }

@@ -17,10 +17,13 @@ public class RegisterWrite {
 	}
 
 	public void performRW() {
+		if(MA_RW_Latch.isBubble) {
+			return;
+		}
 		if (MA_RW_Latch.isRW_enable()) {
 //			MA_RW_Latch.setRW_enable(false);
 			System.out.println("Performing RW!!!!!!");
-			System.out.println("RW "+MA_RW_Latch.endProg);
+			// System.out.println("RW "+MA_RW_Latch.endProg);
 
 			if (MA_RW_Latch.endProg) {
 				Simulator.setSimulationComplete(true);

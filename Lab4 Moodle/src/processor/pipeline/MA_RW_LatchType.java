@@ -2,8 +2,9 @@ package processor.pipeline;
 
 public class MA_RW_LatchType {
 	
-	boolean RW_enable, endProg;
+	boolean RW_enable, endProg, isBubble;
 	int rd, res, rem;
+	int rs1, rs2;
 	
 	public MA_RW_LatchType()
 	{

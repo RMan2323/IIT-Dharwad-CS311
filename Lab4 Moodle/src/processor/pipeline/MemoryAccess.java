@@ -1,7 +1,7 @@
 package processor.pipeline;
 
 import processor.Processor;
-
+@SuppressWarnings("unused")
 public class MemoryAccess {
 	Processor containingProcessor;
 	EX_MA_LatchType EX_MA_Latch;
@@ -14,6 +14,11 @@ public class MemoryAccess {
 	}
 
 	public void performMA() {
+		// int instruction = EX_MA_Latch.instruction;
+		if(EX_MA_Latch.isBubble) {
+			MA_RW_Latch.isBubble = true;
+			return;
+		}
 		if (EX_MA_Latch.isMA_enable()) {
 			System.out.println("Performing MA!!!!!!");
 			EX_MA_Latch.setMA_enable(false);
@@ -41,6 +46,9 @@ public class MemoryAccess {
 						MA_RW_Latch.rem = EX_MA_Latch.remainder;
 						break;
 				}
+			MA_RW_Latch.rs1 = EX_MA_Latch.rs1;
+			MA_RW_Latch.rs2 = EX_MA_Latch.rs2;
+			MA_RW_Latch.rd = EX_MA_Latch.rd;
 		}
 	}
 

@@ -1,6 +1,9 @@
 package processor;
 
+import javax.xml.crypto.Data;
+
 import processor.memorysystem.MainMemory;
+import processor.pipeline.DataLockUnit;
 import processor.pipeline.EX_IF_LatchType;
 import processor.pipeline.EX_MA_LatchType;
 import processor.pipeline.Execute;
@@ -13,6 +16,7 @@ import processor.pipeline.OF_EX_LatchType;
 import processor.pipeline.OperandFetch;
 import processor.pipeline.RegisterFile;
 import processor.pipeline.RegisterWrite;
+import processor.pipeline.DataLockUnit;
 
 public class Processor {
 	
@@ -31,6 +35,7 @@ public class Processor {
 	Execute EXUnit;
 	MemoryAccess MAUnit;
 	RegisterWrite RWUnit;
+	DataLockUnit DLUnit;
 	
 	public Processor()
 	{
@@ -43,12 +48,15 @@ public class Processor {
 		EX_MA_Latch = new EX_MA_LatchType();
 		EX_IF_Latch = new EX_IF_LatchType();
 		MA_RW_Latch = new MA_RW_LatchType();
+
+		DLUnit = new DataLockUnit(this, IF_EnableLatch, IFUnit, OF_EX_Latch, EX_MA_Latch, MA_RW_Latch);
 		
 		IFUnit = new InstructionFetch(this, IF_EnableLatch, IF_OF_Latch, EX_IF_Latch);
-		OFUnit = new OperandFetch(this, IF_OF_Latch, OF_EX_Latch);
+		OFUnit = new OperandFetch(this, IF_OF_Latch, OF_EX_Latch, DLUnit);
 		EXUnit = new Execute(this, OF_EX_Latch, EX_MA_Latch, EX_IF_Latch);
 		MAUnit = new MemoryAccess(this, EX_MA_Latch, MA_RW_Latch);
 		RWUnit = new RegisterWrite(this, MA_RW_Latch, IF_EnableLatch);
+
 	}
 	
 	public void printState(int memoryStartingAddress, int memoryEndingAddress)
@@ -92,6 +100,10 @@ public class Processor {
 
 	public RegisterWrite getRWUnit() {
 		return RWUnit;
+	}
+
+	public DataLockUnit getDLUnit(){
+		return DLUnit;
 	}
 
 }

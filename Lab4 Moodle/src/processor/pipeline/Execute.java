@@ -1,8 +1,8 @@
 package processor.pipeline;
-
 import processor.Processor;
 import processor.pipeline.EX_MA_LatchType.maType;
 
+@SuppressWarnings("unused")
 public class Execute {
 	Processor containingProcessor;
 	OF_EX_LatchType OF_EX_Latch;
@@ -19,10 +19,15 @@ public class Execute {
 
 	public void performEX() {
 //		OF_EX_Latch.setEX_enable(false);
+		if(OF_EX_Latch.isBubble) {
+			EX_MA_Latch.isBubble = true;
+			return;
+		}
 		if(OF_EX_Latch.isEX_enable()) {
 			System.out.println("Performing EX!!!!!!");
 		// int result = 0, rem = 0;
 		int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
+		// int instruction = OF_EX_Latch.instruction;
 
 		switch (OF_EX_Latch.operation) {
 			case "add":
@@ -169,6 +174,9 @@ public class Execute {
 			default:
 				break;
 		}
+		EX_MA_Latch.rs1 = OF_EX_Latch.rs1;
+		EX_MA_Latch.rs2 = OF_EX_Latch.rs2;
+		EX_MA_Latch.rd = OF_EX_Latch.rd;
 	}
 
 	}
