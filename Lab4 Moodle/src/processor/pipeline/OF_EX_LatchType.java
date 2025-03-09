@@ -9,6 +9,9 @@ public class OF_EX_LatchType {
 	public OF_EX_LatchType()
 	{
 		EX_enable = false;
+		rs1 = -1;
+		rs2 = -1;
+		rd = -1;
 	}
 
 	public boolean isEX_enable() {

@@ -64,7 +64,7 @@ public class Simulator {
 		processor.setMainMemory(mem);
 		processor.setRegisterFile(registerFile);
 		int x = 1;
-		while(simulationComplete == false && x <= 50)
+		while(simulationComplete == false && x <= 100)
 		{
 			System.out.println("v CYCLE "+x);
 			processor.getRWUnit().performRW();
@@ -83,12 +83,12 @@ public class Simulator {
 			processor.getOFUnit().performOF();
 			x++;
 			
+			System.out.println("v CYCLE "+x);
 			processor.getDLUnit().insertBubbles();
 
-			System.out.println("v CYCLE "+x);
 			processor.getIFUnit().performIF();
 			x++;
-			
+			System.out.println("-----------------------------------------------------------------------");
 			Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 			Statistics.setNumberOfCycles(Statistics.numberOfCycles+1);
 		}

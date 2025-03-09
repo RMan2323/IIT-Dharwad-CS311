@@ -9,8 +9,7 @@ public class Execute {
 	EX_MA_LatchType EX_MA_Latch;
 	EX_IF_LatchType EX_IF_Latch;
 
-	public Execute(Processor containingProcessor, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch,
-			EX_IF_LatchType eX_IF_Latch) {
+	public Execute(Processor containingProcessor, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch, EX_IF_LatchType eX_IF_Latch) {
 		this.containingProcessor = containingProcessor;
 		this.OF_EX_Latch = oF_EX_Latch;
 		this.EX_MA_Latch = eX_MA_Latch;
@@ -20,10 +19,13 @@ public class Execute {
 	public void performEX() {
 //		OF_EX_Latch.setEX_enable(false);
 		if(OF_EX_Latch.isBubble) {
+			System.out.println("EX Bubble");
 			EX_MA_Latch.isBubble = true;
+			EX_MA_Latch.rd = -1;
 			return;
 		}
 		if(OF_EX_Latch.isEX_enable()) {
+			EX_MA_Latch.isBubble = false;
 			System.out.println("Performing EX!!!!!!");
 		// int result = 0, rem = 0;
 		int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
@@ -37,6 +39,7 @@ public class Execute {
 				EX_MA_Latch.setAluRes(op1 + op2);
 				EX_MA_Latch.setMaType(maType.rw);
 				EX_MA_Latch.rd = OF_EX_Latch.rd;
+				System.out.println("EX: Adding");
 				break;
 			case "mul":
 			case "muli":

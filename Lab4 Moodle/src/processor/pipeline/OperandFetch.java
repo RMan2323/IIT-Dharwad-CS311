@@ -104,7 +104,7 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, imm2);
 					OF_EX_Latch.rs2 = op2;
-
+					System.out.println("OF: Adding");
 					break;
 
 				// R2I
@@ -193,6 +193,7 @@ public class OperandFetch {
 					OF_EX_Latch.rd = -1;
 //					System.out.println(operation);
 					OF_EX_Latch.setImm(0, 0);
+					System.out.println("OF: Got end");
 
 					break;
 
@@ -234,8 +235,8 @@ public class OperandFetch {
 //			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);
 		}
-		else{
-			DLU.insertBubbles();
-		}
+		// else{
+		// 	DLU.insertBubbles();
+		// }
 	}
 }

@@ -12,6 +12,9 @@ public class EX_MA_LatchType {
 	public EX_MA_LatchType()
 	{
 		MA_enable = false;
+		rs1 = -1;
+		rs2 = -1;
+		rd = -1;
 	}
 
 	public boolean isMA_enable() {

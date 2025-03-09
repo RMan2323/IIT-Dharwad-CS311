@@ -16,10 +16,13 @@ public class MemoryAccess {
 	public void performMA() {
 		// int instruction = EX_MA_Latch.instruction;
 		if(EX_MA_Latch.isBubble) {
+			System.out.println("MA Bubble");
 			MA_RW_Latch.isBubble = true;
+			MA_RW_Latch.rd = -1;
 			return;
 		}
 		if (EX_MA_Latch.isMA_enable()) {
+			MA_RW_Latch.isBubble = false;
 			System.out.println("Performing MA!!!!!!");
 			EX_MA_Latch.setMA_enable(false);
 			if (EX_MA_Latch.endProg) {
@@ -33,19 +36,19 @@ public class MemoryAccess {
 						System.out.println("----\nSTORED " + EX_MA_Latch.data + " into address " + EX_MA_Latch.stAddr);
 						break;
 					case load:
-						containingProcessor.getRegisterFile().setValue(EX_MA_Latch.rd,
-								containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr));
-						System.out.println(
-								"----\nLOADED " + containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr)
-										+ " into register " + EX_MA_Latch.rd);
+						// containingProcessor.getRegisterFile().setValue(EX_MA_Latch.rd, containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr));
+						MA_RW_Latch.setRd(EX_MA_Latch.rd);
+						MA_RW_Latch.setRes(containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr));
+						// MA_RW_Latch.rem = EX_MA_Latch.remainder;
+						System.out.println("----\nLOADING " + containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr) + " into register " + EX_MA_Latch.rd);
 						break;
 					default:
-						MA_RW_Latch.setRW_enable(true);
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
 						MA_RW_Latch.setRes(EX_MA_Latch.aluRes);
 						MA_RW_Latch.rem = EX_MA_Latch.remainder;
 						break;
 				}
+			MA_RW_Latch.setRW_enable(true);
 			MA_RW_Latch.rs1 = EX_MA_Latch.rs1;
 			MA_RW_Latch.rs2 = EX_MA_Latch.rs2;
 			MA_RW_Latch.rd = EX_MA_Latch.rd;

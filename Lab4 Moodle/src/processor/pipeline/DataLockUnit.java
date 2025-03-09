@@ -21,38 +21,7 @@ public class DataLockUnit {
 		this.EX = eX_unit;
 		this.MA = mA_unit;
         this.RW = rW_unit;
-        stalls = 0;
-
-        opcodes.put("00000", "add");
-		opcodes.put("00001", "addi");
-		opcodes.put("00010", "sub");
-		opcodes.put("00011", "subi");
-		opcodes.put("00100", "mul");
-		opcodes.put("00101", "muli");
-		opcodes.put("00110", "div");
-		opcodes.put("00111", "divi");
-		opcodes.put("01000", "and");
-		opcodes.put("01001", "andi");
-		opcodes.put("01010", "or");
-		opcodes.put("01011", "ori");
-		opcodes.put("01100", "xor");
-		opcodes.put("01101", "xori");
-		opcodes.put("01110", "slt");
-		opcodes.put("01111", "slti");
-		opcodes.put("10000", "sll");
-		opcodes.put("10001", "slli");
-		opcodes.put("10010", "srl");
-		opcodes.put("10011", "srli");
-		opcodes.put("10100", "sra");
-		opcodes.put("10101", "srai");
-		opcodes.put("10110", "load");
-		opcodes.put("10111", "store");
-		opcodes.put("11000", "jmp");
-		opcodes.put("11001", "beq");
-		opcodes.put("11010", "bne");
-		opcodes.put("11011", "blt");
-		opcodes.put("11100", "bgt");
-		opcodes.put("11101", "end");
+        this.stalls = 0;
     }
 
     public void checkConflicts(int rsA1, int rsA2){
@@ -61,43 +30,47 @@ public class DataLockUnit {
         //OF-EX Conflict
         rBd = EX.rd;
         
-        if(rBd == rsA1 || rBd == rsA2){
+        if((rBd == rsA1 || rBd == rsA2) && (rBd != -1)){
             //stall IF and OF
             //in EX stage, put three bubbles
             System.out.println("OF-EX CONFLICT!");
             stalls = 3;
+            return;
         }
 
         //OF-MA Conflict
         rBd = MA.rd;
 
-        if(rBd == rsA1 || rBd == rsA2){
+        if((rBd == rsA1 || rBd == rsA2) && (rBd != -1)){
             //stall IF and OF
             //in EX stage, put two bubbles
             System.out.println("OF-MA CONFLICT!");
             stalls = 2;
+            return;
         }
 
         //OF-RW Conflict
         rBd = RW.rd;
 
-        if(rBd == rsA1 || rBd == rsA2){
+        if((rBd == rsA1 || rBd == rsA2) && (rBd != -1)){
             //stall IF and OF
-            //in EX stage, put one bubble
+            //in EX stage, put one bubble  
             System.out.println("OF-RW CONFLICT!");
             stalls = 1;
+            return;
         }
     }
 
     public void insertBubbles(){
         if(stalls > 0){
             IF_en.setIF_enable(false);
-            System.out.println("Stalled");
+            System.out.println("Stalled for "+stalls);
             stalls--;
             EX.isBubble = true;
         }
         else{
             IF_en.setIF_enable(true);
+            EX.isBubble = false;
         }
     }
 }
