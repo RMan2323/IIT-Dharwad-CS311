@@ -171,9 +171,9 @@ public class Execute {
 				EX_MA_Latch.setMaType(maType.store);
 				break;
 
-//			case "end":
-//				EX_MA_Latch.setMA_enable(true);
-//				EX_MA_Latch.setEndProg(true);
+			case "end":
+				EX_MA_Latch.setMA_enable(true);
+				EX_MA_Latch.setEndProg(true);
 			default:
 				break;
 		}

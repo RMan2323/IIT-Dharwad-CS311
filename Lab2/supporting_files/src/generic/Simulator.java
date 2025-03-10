@@ -254,10 +254,16 @@ public class Simulator {
 				case "load":
 				case "store": {
 					op1Bin = registers.get(op1.getValue()); // register
-					op2Bin = String.format("%17s", Integer.toBinaryString(ParsedProgram.symtab.get(op2.getLabelValue()))).replace(' ', '0'); // immediate
+					// op2Bin = String.format("%17s", Integer.toBinaryString(ParsedProgram.symtab.get(op2.getLabelValue()))).replace(' ', '0'); // immediate
+					if((op2.operandType).equals(OperandType.Label)){
+						op2Bin = String.format("%17s", Integer.toBinaryString(ParsedProgram.symtab.get(op2.getLabelValue()))).replace(' ', '0');
+					}
+					else{
+						op2Bin = String.format("%17s", Integer.toBinaryString(op2.getValue())).replace(' ', '0');
+					}
 					op3Bin = registers.get(op3.getValue()); // register
-					System.out.println("Label value: "+op2.getLabelValue());
-					System.err.println("Final: "+ParsedProgram.symtab.get(op2.getLabelValue()));
+					// System.out.println("Label value: "+op2.getLabelValue());
+					// System.err.println("Final: "+ParsedProgram.symtab.get(op2.getLabelValue()));
 					instruction = opcodes.get(operation) + op1Bin + op3Bin + op2Bin;
 					instructionInt = getTwosComplement(instruction);
 
