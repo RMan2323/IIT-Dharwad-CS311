@@ -104,7 +104,11 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, imm2);
 					OF_EX_Latch.rs2 = op2;
-					System.out.println("OF: Adding");
+					// System.out.println("OF: Adding");
+
+					if(operation == "divi") OF_EX_Latch.writeTo31 = true;
+					else OF_EX_Latch.writeTo31 = false;
+					
 					break;
 
 				// R2I
@@ -129,6 +133,9 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, op3);
 					OF_EX_Latch.rs2 = -1;
+
+					if(operation == "divi") OF_EX_Latch.writeTo31 = true;
+					else OF_EX_Latch.writeTo31 = false;
 
 					break;
 

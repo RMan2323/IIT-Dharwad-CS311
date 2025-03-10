@@ -7,7 +7,7 @@ import processor.pipeline.RegisterFile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
+@SuppressWarnings("unused")
 public class Simulator {
 		
 	static Processor processor;
@@ -64,7 +64,7 @@ public class Simulator {
 		processor.setMainMemory(mem);
 		processor.setRegisterFile(registerFile);
 		int x = 1;
-		while(simulationComplete == false && x <= 100)
+		while(simulationComplete == false && x <= 150)
 		{
 			System.out.println("v CYCLE "+x);
 			processor.getRWUnit().performRW();

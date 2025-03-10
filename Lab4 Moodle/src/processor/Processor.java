@@ -17,7 +17,7 @@ import processor.pipeline.OperandFetch;
 import processor.pipeline.RegisterFile;
 import processor.pipeline.RegisterWrite;
 import processor.pipeline.DataLockUnit;
-
+@SuppressWarnings("unused")
 public class Processor {
 	
 	RegisterFile registerFile;

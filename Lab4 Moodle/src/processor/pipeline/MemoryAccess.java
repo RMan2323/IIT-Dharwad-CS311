@@ -52,6 +52,7 @@ public class MemoryAccess {
 			MA_RW_Latch.rs1 = EX_MA_Latch.rs1;
 			MA_RW_Latch.rs2 = EX_MA_Latch.rs2;
 			MA_RW_Latch.rd = EX_MA_Latch.rd;
+			MA_RW_Latch.writeTo31 = EX_MA_Latch.writeTo31;
 		}
 	}
 

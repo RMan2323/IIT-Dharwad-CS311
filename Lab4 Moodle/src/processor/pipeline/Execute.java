@@ -180,6 +180,7 @@ public class Execute {
 		EX_MA_Latch.rs1 = OF_EX_Latch.rs1;
 		EX_MA_Latch.rs2 = OF_EX_Latch.rs2;
 		EX_MA_Latch.rd = OF_EX_Latch.rd;
+		EX_MA_Latch.writeTo31 = OF_EX_Latch.writeTo31;
 	}
 
 	}
