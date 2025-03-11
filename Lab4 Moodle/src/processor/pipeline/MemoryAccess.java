@@ -19,6 +19,11 @@ public class MemoryAccess {
 			System.out.println("MA Bubble");
 			MA_RW_Latch.isBubble = true;
 			MA_RW_Latch.rd = -1;
+			if(MA_RW_Latch.writeTo31) MA_RW_Latch.writeTo31 = false;
+			return;
+		}
+		if(!EX_MA_Latch.isMA_enable()){
+			MA_RW_Latch.setRW_enable(false);
 			return;
 		}
 		if (EX_MA_Latch.isMA_enable()) {
@@ -53,6 +58,7 @@ public class MemoryAccess {
 			MA_RW_Latch.rs2 = EX_MA_Latch.rs2;
 			MA_RW_Latch.rd = EX_MA_Latch.rd;
 			MA_RW_Latch.writeTo31 = EX_MA_Latch.writeTo31;
+			if(MA_RW_Latch.writeTo31) MA_RW_Latch.writeTo31 = false;
 		}
 	}
 

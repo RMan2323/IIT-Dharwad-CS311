@@ -57,7 +57,14 @@ public class OperandFetch {
 	}
 
 	public void performOF() {
+		if(IF_OF_Latch.isBubble){
+			System.out.println("OF Bubble");
+			OF_EX_Latch.isBubble = true;
+			IF_OF_Latch.isBubble = false;
+			return;
+		}
 		if (IF_OF_Latch.isOF_enable() && DLU.stalls == 0) {
+			OF_EX_Latch.isBubble = false;
 			System.out.println("Performing OF!!!!!!");
 			
 			int instruction = IF_OF_Latch.getInstruction();
@@ -106,7 +113,7 @@ public class OperandFetch {
 					OF_EX_Latch.rs2 = op2;
 					// System.out.println("OF: Adding");
 
-					if(operation == "divi") OF_EX_Latch.writeTo31 = true;
+					if(operation == "div") {OF_EX_Latch.writeTo31 = true; System.out.println(operation + " Set true");}
 					else OF_EX_Latch.writeTo31 = false;
 					
 					break;
@@ -134,7 +141,7 @@ public class OperandFetch {
 					OF_EX_Latch.setImm(imm1, op3);
 					OF_EX_Latch.rs2 = -1;
 
-					if(operation == "divi") OF_EX_Latch.writeTo31 = true;
+					if(operation == "divi") {OF_EX_Latch.writeTo31 = true; System.out.println(operation + " Set true");}
 					else OF_EX_Latch.writeTo31 = false;
 
 					break;
@@ -237,7 +244,13 @@ public class OperandFetch {
 				default:
 					break;
 			}
-			DLU.checkConflicts(OF_EX_Latch.rs1, OF_EX_Latch.rs2);
+			if(DLU.pass == 1 && (OF_EX_Latch.rs1 == OF_EX_Latch.rd || OF_EX_Latch.rs2 == OF_EX_Latch.rd)){
+				DLU.pass = 0;
+			}
+			else{
+				DLU.pass = 0;
+				DLU.checkConflicts(OF_EX_Latch.rs1, OF_EX_Latch.rs2);
+			}
 			OF_EX_Latch.setOperation(operation);
 //			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);

@@ -2,16 +2,23 @@ package processor.pipeline;
 
 public class OF_EX_LatchType {
 	
-	boolean EX_enable, isBubble, writeTo31;
+	boolean EX_enable, isBubble, writeTo31, isBranchBubble;
 	int imm1, imm2, branchTgt, rd, rs1, rs2, opcode;
 	String operation;
 	
 	public OF_EX_LatchType()
 	{
+		isBubble = false;
+		isBranchBubble = false;
 		EX_enable = false;
+		writeTo31 = false;
 		rs1 = -1;
 		rs2 = -1;
 		rd = -1;
+	}
+
+	public void setBubble(boolean bub){
+		isBubble = bub;
 	}
 
 	public boolean isEX_enable() {

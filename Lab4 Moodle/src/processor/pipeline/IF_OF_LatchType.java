@@ -2,12 +2,16 @@ package processor.pipeline;
 
 public class IF_OF_LatchType {
 	
-	boolean OF_enable;
+	boolean OF_enable, isBubble;
 	int instruction, PC;
 	
 	public IF_OF_LatchType()
 	{
 		OF_enable = false;
+	}
+
+	public void setBubble(boolean bub){
+		isBubble = bub;
 	}
 
 	public boolean isOF_enable() {

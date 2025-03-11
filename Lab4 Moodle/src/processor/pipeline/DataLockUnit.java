@@ -9,7 +9,7 @@ public class DataLockUnit {
     OF_EX_LatchType EX;
     EX_MA_LatchType MA;
     MA_RW_LatchType RW;
-    int stalls;
+    int stalls, pass;
 
     public DataLockUnit(Processor containingProcessor, IF_EnableLatchType iF_en, InstructionFetch iF_unit, OF_EX_LatchType eX_unit, EX_MA_LatchType mA_unit, MA_RW_LatchType rW_unit){
         this.containingProcessor = containingProcessor;
@@ -19,6 +19,7 @@ public class DataLockUnit {
 		this.MA = mA_unit;
         this.RW = rW_unit;
         this.stalls = 0;
+        this.pass = 0;
     }
 
     public void checkConflicts(int rsA1, int rsA2){
@@ -31,7 +32,9 @@ public class DataLockUnit {
             //stall IF and OF
             //in EX stage, put three bubbles
             System.out.println("OF-EX CONFLICT!");
+            System.out.println(rsA1 + " " + rsA2 + " " + rBd + " " + EX.writeTo31);
             stalls = 3;
+            pass++;
             return;
         }
 
@@ -43,6 +46,7 @@ public class DataLockUnit {
             //in EX stage, put two bubbles
             System.out.println("OF-MA CONFLICT!");
             stalls = 2;
+            pass++;
             return;
         }
 
@@ -54,6 +58,7 @@ public class DataLockUnit {
             //in EX stage, put one bubble  
             System.out.println("OF-RW CONFLICT!");
             stalls = 1;
+            pass++;
             return;
         }
     }

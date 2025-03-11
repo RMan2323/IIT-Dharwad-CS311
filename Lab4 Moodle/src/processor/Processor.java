@@ -17,6 +17,7 @@ import processor.pipeline.OperandFetch;
 import processor.pipeline.RegisterFile;
 import processor.pipeline.RegisterWrite;
 import processor.pipeline.DataLockUnit;
+import processor.pipeline.BranchLockUnit;;
 @SuppressWarnings("unused")
 public class Processor {
 	
@@ -36,6 +37,7 @@ public class Processor {
 	MemoryAccess MAUnit;
 	RegisterWrite RWUnit;
 	DataLockUnit DLUnit;
+	BranchLockUnit BLUnit;
 	
 	public Processor()
 	{
@@ -53,10 +55,11 @@ public class Processor {
 		
 		IFUnit = new InstructionFetch(this, IF_EnableLatch, IF_OF_Latch, EX_IF_Latch);
 		OFUnit = new OperandFetch(this, IF_OF_Latch, OF_EX_Latch, DLUnit);
-		EXUnit = new Execute(this, OF_EX_Latch, EX_MA_Latch, EX_IF_Latch);
+		BLUnit = new BranchLockUnit(this, IF_EnableLatch, IFUnit, OF_EX_Latch, IF_OF_Latch);
+		EXUnit = new Execute(this, OF_EX_Latch, EX_MA_Latch, EX_IF_Latch, BLUnit);
 		MAUnit = new MemoryAccess(this, EX_MA_Latch, MA_RW_Latch);
 		RWUnit = new RegisterWrite(this, MA_RW_Latch, IF_EnableLatch);
-
+		
 	}
 	
 	public void printState(int memoryStartingAddress, int memoryEndingAddress)

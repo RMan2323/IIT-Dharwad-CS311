@@ -64,7 +64,7 @@ public class Simulator {
 		processor.setMainMemory(mem);
 		processor.setRegisterFile(registerFile);
 		int x = 1;
-		while(simulationComplete == false && x <= 150)
+		while(simulationComplete == false)
 		{
 			System.out.println("v CYCLE "+x);
 			processor.getRWUnit().performRW();

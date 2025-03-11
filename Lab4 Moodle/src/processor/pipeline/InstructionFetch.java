@@ -30,7 +30,7 @@ public class InstructionFetch {
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 
 			IF_OF_Latch.setOF_enable(true);
-		} else if (EX_IF_Latch.isIF_enable()) {
+		} else if (IF_EnableLatch.isIF_enable() && EX_IF_Latch.isIF_enable()) {
 			System.out.println("Performing IF!!!!!!");
 			int currentPC = (EX_IF_Latch.getPC() == -1) ? containingProcessor.getRegisterFile().getProgramCounter() : EX_IF_Latch.PC;
 			System.out.println((EX_IF_Latch.getPC() == -1) ? "Next PC" : "Branched to " + EX_IF_Latch.PC);
@@ -41,7 +41,7 @@ public class InstructionFetch {
 
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 
-			// EX_IF_Latch.setIF_enable(false);
+			EX_IF_Latch.setIF_enable(false);
 			IF_OF_Latch.setOF_enable(true);
 		}
 		// IF_EnableLatch.setIF_enable(false);

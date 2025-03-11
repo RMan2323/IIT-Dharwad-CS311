@@ -19,6 +19,7 @@ public class RegisterWrite {
 	public void performRW() {
 		if (MA_RW_Latch.isBubble) {
 			System.out.println("RW Bubble");
+			MA_RW_Latch.writeTo31 = false;
 			return;
 		}
 		if (MA_RW_Latch.isRW_enable()) {
@@ -35,6 +36,10 @@ public class RegisterWrite {
 					System.out.println("----\nPUTTING " + MA_RW_Latch.res + " in register " + MA_RW_Latch.rd);
 					containingProcessor.getRegisterFile().setValue(31, MA_RW_Latch.rem);
 					System.out.println("----\nPUTTING " + MA_RW_Latch.rem + " in register 31");
+					if(MA_RW_Latch.writeTo31){
+						System.out.println("REMAINDER WRITTEN TO 31!!!!!!!!!!!!!!!!!!!!");
+						MA_RW_Latch.writeTo31 = false;
+					}
 				}
 			}
 			// IF_EnableLatch.setIF_enable(true);
