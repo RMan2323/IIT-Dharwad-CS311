@@ -3,7 +3,7 @@ package processor.pipeline;
 public class OF_EX_LatchType {
 	
 	boolean EX_enable, isBubble, writeTo31, isBranchBubble;
-	int imm1, imm2, branchTgt, rd, rs1, rs2, opcode;
+	int imm1, imm2, branchTgt, rd, rs1, rs2, opcode, endPC;
 	String operation;
 	
 	public OF_EX_LatchType()

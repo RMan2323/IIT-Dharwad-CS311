@@ -33,6 +33,7 @@ public class MemoryAccess {
 			if (EX_MA_Latch.endProg) {
 				MA_RW_Latch.setEndProg(true);
 				MA_RW_Latch.setRW_enable(true);
+				MA_RW_Latch.endPC = EX_MA_Latch.endPC;
 				System.out.println("MA " + MA_RW_Latch.endProg);
 			} else
 				switch (EX_MA_Latch.type) {

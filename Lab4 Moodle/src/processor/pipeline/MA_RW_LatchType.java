@@ -3,7 +3,7 @@ package processor.pipeline;
 public class MA_RW_LatchType {
 	
 	boolean RW_enable, endProg, isBubble, writeTo31;
-	int rd, res, rem;
+	int rd, res, rem, endPC;
 	int rs1, rs2;
 	
 	public MA_RW_LatchType()

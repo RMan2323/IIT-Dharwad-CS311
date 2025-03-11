@@ -7,7 +7,7 @@ public class EX_MA_LatchType {
 	enum maType{load, store, rw};
 	maType type;
 	int data, rd;
-	int rs1, rs2;
+	int rs1, rs2, endPC;
 	
 	public EX_MA_LatchType()
 	{

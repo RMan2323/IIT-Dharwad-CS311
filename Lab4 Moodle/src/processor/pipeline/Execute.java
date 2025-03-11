@@ -193,6 +193,7 @@ public class Execute {
 			case "end":
 				EX_MA_Latch.setMA_enable(true);
 				EX_MA_Latch.setEndProg(true);
+				EX_MA_Latch.endPC = OF_EX_Latch.endPC;
 			default:
 				break;
 		}

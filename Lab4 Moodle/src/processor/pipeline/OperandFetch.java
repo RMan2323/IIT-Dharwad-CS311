@@ -208,6 +208,7 @@ public class OperandFetch {
 //					System.out.println(operation);
 					OF_EX_Latch.setImm(0, 0);
 					System.out.println("OF: Got end");
+					OF_EX_Latch.endPC = IF_OF_Latch.PC;
 
 					break;
 

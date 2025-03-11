@@ -29,7 +29,8 @@ public class RegisterWrite {
 
 			if (MA_RW_Latch.endProg) {
 				Simulator.setSimulationComplete(true);
-				System.out.println("----\nENDING");
+				containingProcessor.getRegisterFile().setProgramCounter(MA_RW_Latch.endPC+1);
+				// System.out.println("----\nENDING at "+MA_RW_Latch.endPC);
 			} else {
 				if (MA_RW_Latch.rd != -1) {
 					containingProcessor.getRegisterFile().setValue(MA_RW_Latch.rd, MA_RW_Latch.res);
