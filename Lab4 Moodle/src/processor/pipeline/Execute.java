@@ -2,6 +2,7 @@ package processor.pipeline;
 import processor.Processor;
 import processor.pipeline.EX_MA_LatchType.maType;
 import processor.pipeline.BranchLockUnit;
+import generic.Statistics;
 
 @SuppressWarnings("unused")
 public class Execute {
@@ -35,6 +36,7 @@ public class Execute {
 		if(OF_EX_Latch.isEX_enable()) {
 			EX_MA_Latch.isBubble = false;
 			System.out.println("Performing EX!!!!!!");
+			Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 		// int result = 0, rem = 0;
 		int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
 		// int instruction = OF_EX_Latch.instruction;
@@ -47,6 +49,7 @@ public class Execute {
 				EX_MA_Latch.setAluRes(op1 + op2);
 				EX_MA_Latch.setMaType(maType.rw);
 				EX_MA_Latch.rd = OF_EX_Latch.rd;
+				OF_EX_Latch.writeTo31 = false;
 				System.out.println("EX: Adding");
 				break;
 			case "mul":
@@ -56,6 +59,7 @@ public class Execute {
 				EX_MA_Latch.setAluRes(op1 * op2);
 				EX_MA_Latch.setMaType(maType.rw);
 				EX_MA_Latch.rd = OF_EX_Latch.rd;
+				OF_EX_Latch.writeTo31 = false;
 				break;
 			case "sub":
 			case "subi":
@@ -64,6 +68,7 @@ public class Execute {
 				EX_MA_Latch.setAluRes(op1 - op2);
 				EX_MA_Latch.setMaType(maType.rw);
 				EX_MA_Latch.rd = OF_EX_Latch.rd;
+				OF_EX_Latch.writeTo31 = false;
 				break;
 			case "div":
 			case "divi":
@@ -82,6 +87,7 @@ public class Execute {
 				EX_MA_Latch.setAluRes(op1 & op2);
 				EX_MA_Latch.setMaType(maType.rw);
 				EX_MA_Latch.rd = OF_EX_Latch.rd;
+				OF_EX_Latch.writeTo31 = false;
 				break;
 			case "or":
 			case "ori":

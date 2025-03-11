@@ -142,7 +142,7 @@ public class OperandFetch {
 					OF_EX_Latch.rs2 = -1;
 
 					if(operation == "divi") {OF_EX_Latch.writeTo31 = true; System.out.println(operation + " Set true");}
-					else OF_EX_Latch.writeTo31 = false;
+					// else OF_EX_Latch.writeTo31 = false;
 
 					break;
 

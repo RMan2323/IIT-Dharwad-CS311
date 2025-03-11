@@ -61,6 +61,8 @@ public class Simulator {
 		System.out.println("\n\nSimulating now");
 		Statistics.setNumberOfCycles(0);
 		Statistics.setNumberOfInstructions(0);
+		Statistics.numberOfDataStalls = 0;
+		Statistics.numberOfWrongPaths = 0;
 		processor.setMainMemory(mem);
 		processor.setRegisterFile(registerFile);
 		int x = 1;
@@ -89,7 +91,6 @@ public class Simulator {
 			processor.getIFUnit().performIF();
 			x++;
 			System.out.println("-----------------------------------------------------------------------");
-			Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 			Statistics.setNumberOfCycles(Statistics.numberOfCycles+1);
 		}
 		

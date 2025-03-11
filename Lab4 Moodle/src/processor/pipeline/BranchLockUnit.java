@@ -1,5 +1,5 @@
 package processor.pipeline;
-
+import generic.Statistics;
 import processor.Processor;
 public class BranchLockUnit {
     Processor containingProcessor;
@@ -27,6 +27,7 @@ public class BranchLockUnit {
             EX.isBranchBubble = true;
             OF.setBubble(true);
             System.out.println("BRANCHING AND INSERTING BUBBLES");
+            Statistics.numberOfWrongPaths++;
         // }
     }
 }
