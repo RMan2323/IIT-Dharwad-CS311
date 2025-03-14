@@ -7,6 +7,7 @@ import processor.pipeline.RegisterFile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import generic.EventQueue;
 @SuppressWarnings("unused")
 public class Simulator {
 		
@@ -14,6 +15,7 @@ public class Simulator {
 	static boolean simulationComplete;
 	static RegisterFile registerFile = new RegisterFile();  //create registerFile
 	static MainMemory mem = new MainMemory();  //create memory space
+	static EventQueue eventQueue = new EventQueue();
 	
 	public static void setupSimulation(String assemblyProgramFile, Processor p)
 	{
@@ -21,6 +23,10 @@ public class Simulator {
 		loadProgram(assemblyProgramFile);
 		
 		simulationComplete = false;
+	}
+
+	public static EventQueue getEventQueue(){
+		return eventQueue;
 	}
 	
 	static void loadProgram(String assemblyProgramFile)
@@ -65,31 +71,29 @@ public class Simulator {
 		Statistics.numberOfWrongPaths = 0;
 		processor.setMainMemory(mem);
 		processor.setRegisterFile(registerFile);
-		int x = 1;
+
 		while(simulationComplete == false)
 		{
-			System.out.println("v CYCLE "+x);
+			System.out.println("v CYCLE ");
 			processor.getRWUnit().performRW();
-			x++;
 			if(simulationComplete) break;
 			
-			System.out.println("v CYCLE "+x);
+			System.out.println("v CYCLE ");
 			processor.getMAUnit().performMA();
-			x++;
 			
-			System.out.println("v CYCLE "+x);
+			System.out.println("v CYCLE ");
 			processor.getEXUnit().performEX();
-			x++;
+
+			eventQueue.processEvents();
 			
-			System.out.println("v CYCLE "+x);
+			System.out.println("v CYCLE ");
 			processor.getOFUnit().performOF();
-			x++;
 			
-			System.out.println("v CYCLE "+x);
+			System.out.println("v CYCLE ");
 			processor.getDLUnit().insertBubbles();
 
 			processor.getIFUnit().performIF();
-			x++;
+
 			System.out.println("-----------------------------------------------------------------------");
 			Statistics.setNumberOfCycles(Statistics.numberOfCycles+1);
 		}

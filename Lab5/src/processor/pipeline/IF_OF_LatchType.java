@@ -2,7 +2,7 @@ package processor.pipeline;
 
 public class IF_OF_LatchType {
 	
-	boolean OF_enable, isBubble;
+	boolean OF_enable, isBubble, isOF_busy;
 	int instruction, PC;
 	
 	public IF_OF_LatchType()

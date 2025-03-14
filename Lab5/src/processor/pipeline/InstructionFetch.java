@@ -1,8 +1,15 @@
 package processor.pipeline;
 
+import configuration.Configuration;
+import processor.Clock;
+import generic.Element;
+import generic.MemoryReadEvent;
+import generic.MemoryResponseEvent;
+import generic.Simulator;
 import processor.Processor;
+import generic.Event;
 
-public class InstructionFetch {
+public class InstructionFetch implements Element{
 
 	Processor containingProcessor;
 	IF_EnableLatchType IF_EnableLatch;
@@ -19,6 +26,18 @@ public class InstructionFetch {
 	}
 
 	public void performIF() {
+		if(IF_EnableLatch.isIF_enable()){
+			if(IF_EnableLatch.isIF_busy){
+				return;
+			}
+			Simulator.getEventQueue().addEvent(
+				new MemoryReadEvent(
+					Clock.getCurrentTime() + Configuration.mainMemoryLatency,
+					this,
+					containingProcessor.getMainMemory(),
+					containingProcessor.getRegisterFile().getProgramCounter())
+			);
+		}
 		if (IF_EnableLatch.isIF_enable() && !EX_IF_Latch.isIF_enable()) {
 			System.out.println("Performing IF!!!!!!");
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
@@ -45,5 +64,18 @@ public class InstructionFetch {
 			IF_OF_Latch.setOF_enable(true);
 		}
 		// IF_EnableLatch.setIF_enable(false);
+	}
+
+	@Override
+	public void handleEvent(Event e){
+		if(IF_OF_Latch.isOF_busy){
+			e.setEventTime(Clock.getCurrentTime()+1);
+			Simulator.getEventQueue().addEvent(e);
+		} else{
+			MemoryResponseEvent event = (MemoryResponseEvent) e;
+			IF_OF_Latch.setInstruction(event.getValue());
+			IF_OF_Latch.setOF_enable(true);
+			IF_EnableLatch.isIF_busy = false;
+		}
 	}
 }
