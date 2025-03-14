@@ -1,0 +1,4 @@
+Number of instructions executed = 29
+Number of cycles taken = 82
+Number of cycles for which OF was stalled = 48
+Number of times instructions on wrong branch entered pipeline = 5
