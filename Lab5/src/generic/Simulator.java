@@ -71,35 +71,35 @@ public class Simulator {
 		Statistics.numberOfWrongPaths = 0;
 		processor.setMainMemory(mem);
 		processor.setRegisterFile(registerFile);
+		int x = 0;
 
-		while(simulationComplete == false)
+		while(simulationComplete == false && x <= 800)
 		{
-			System.out.println("v CYCLE ");
+			System.out.println("CLOCK: "+Clock.getCurrentTime());
+			System.out.println("v CYCLE "+x++);
 			processor.getRWUnit().performRW();
 			if(simulationComplete) break;
-			
-			System.out.println("v CYCLE ");
+
+			System.out.println("v CYCLE "+x++);
 			processor.getMAUnit().performMA();
 			
-			System.out.println("v CYCLE ");
+			System.out.println("v CYCLE "+x++);
 			processor.getEXUnit().performEX();
-
+			
 			eventQueue.processEvents();
 			
-			System.out.println("v CYCLE ");
+			System.out.println("v CYCLE "+x++);
 			processor.getOFUnit().performOF();
 			
-			System.out.println("v CYCLE ");
+			System.out.println("v CYCLE "+x++);
 			processor.getDLUnit().insertBubbles();
-
 			processor.getIFUnit().performIF();
 
+			Clock.incrementClock();
+			
 			System.out.println("-----------------------------------------------------------------------");
 			Statistics.setNumberOfCycles(Statistics.numberOfCycles+1);
 		}
-		
-		// TODO
-		// set statistics
 	}
 	
 	public static void setSimulationComplete(boolean value)

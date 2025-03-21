@@ -12,25 +12,25 @@ n:
 	8
 	.text
 main:
-	sub %x3, %x3, %x3
-	sub %x4, %x4, %x4
-	load %x0, $n, %x8
+9	sub %x3, %x3, %x3
+10	sub %x4, %x4, %x4
+11	load %x0, $n, %x8
 outerloop:
-	blt %x3, %x8, innerloop
-	end
-	addi %x3, 1, %x4
+12	blt %x3, %x8, innerloop
+13	end
+14	addi %x3, 1, %x4
 innerloop:
-	addi %x3, 1, %x4
+15	addi %x3, 1, %x4
 innerloopz:
-	blt %x4, %x8, swap
-	addi %3, 1, %x3
-	jmp outerloop
+16	blt %x4, %x8, swap
+17	addi %3, 1, %x3
+18	jmp outerloop
 swap:
-	load %x3, $a, %x5
-	load %x4, $a, %x6
-	blt %x5, %x6, exchange
-	addi %x4, 1, %x4
-	jmp innerloopz
+19	load %x3, $a, %x5
+20	load %x4, $a, %x6
+21	blt %x5, %x6, exchange
+22	addi %x4, 1, %x4
+23	jmp innerloopz
 exchange:
 	sub %x7, %x7, %x7
 	add %x0, %x5, %x7

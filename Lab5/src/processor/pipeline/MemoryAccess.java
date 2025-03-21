@@ -20,6 +20,8 @@ public class MemoryAccess {
 			MA_RW_Latch.isBubble = true;
 			MA_RW_Latch.rd = -1;
 			if(MA_RW_Latch.writeTo31) MA_RW_Latch.writeTo31 = false;
+			EX_MA_Latch.setMA_enable(false);
+			MA_RW_Latch.setRW_enable(true);
 			return;
 		}
 		if(!EX_MA_Latch.isMA_enable()){

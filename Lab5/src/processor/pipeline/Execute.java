@@ -21,8 +21,9 @@ public class Execute {
 	}
 
 	public void performEX() {
-//		OF_EX_Latch.setEX_enable(false);
+		// OF_EX_Latch.setEX_enable(false);
 		if(OF_EX_Latch.isBubble || OF_EX_Latch.isBranchBubble) {
+			// OF_EX_Latch.setEX_enable(false);;
 			System.out.println("EX Bubble");
 			EX_MA_Latch.isBubble = true;
 			EX_MA_Latch.rd = -1;
@@ -31,16 +32,18 @@ public class Execute {
 			if(EX_MA_Latch.writeTo31) EX_MA_Latch.writeTo31 = false;
 			OF_EX_Latch.writeTo31 = false;
 			if(OF_EX_Latch.isBranchBubble) OF_EX_Latch.isBranchBubble = false;
+			OF_EX_Latch.isBubble = false;
 			return;
 		}
 		if(OF_EX_Latch.isEX_enable()) {
+			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.isBubble = false;
 			System.out.println("Performing EX!!!!!!");
 			Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 		// int result = 0, rem = 0;
 		int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
 		// int instruction = OF_EX_Latch.instruction;
-
+			// print
 		switch (OF_EX_Latch.operation) {
 			case "add":
 			case "addi":

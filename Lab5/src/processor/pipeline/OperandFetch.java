@@ -57,8 +57,9 @@ public class OperandFetch {
 	}
 
 	public void performOF() {
-		if(IF_OF_Latch.isBubble){
+		if(IF_OF_Latch.isBubble && IF_OF_Latch.isOF_enable() && DLU.stalls == 0){
 			System.out.println("OF Bubble");
+			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.isBubble = true;
 			IF_OF_Latch.isBubble = false;
 			return;
@@ -100,6 +101,7 @@ public class OperandFetch {
 				case "sll":
 				case "srl":
 				case "sra":
+				System.out.println("PERFORMED sub");
 					op2str = BinInstruction.substring(10, 15);
 					op2 = registers.get(op2str); // register
 					op3str = BinInstruction.substring(15, 20);
@@ -197,7 +199,7 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, imm2);
 					System.out.println(currentPC);
-					OF_EX_Latch.setBt(currentPC + op3);
+					OF_EX_Latch.setBt(currentPC + op3 - 1);
 
 					break;
 
@@ -253,8 +255,9 @@ public class OperandFetch {
 				DLU.checkConflicts(OF_EX_Latch.rs1, OF_EX_Latch.rs2);
 			}
 			OF_EX_Latch.setOperation(operation);
-//			IF_OF_Latch.setOF_enable(false);
+			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);
+			System.out.println("OF: SET EX TO ENABLE");
 		}
 		// else{
 		// 	DLU.insertBubbles();

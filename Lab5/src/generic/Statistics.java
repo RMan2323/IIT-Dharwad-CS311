@@ -1,6 +1,7 @@
 package generic;
 
 import java.io.PrintWriter;
+import processor.Clock;
 
 public class Statistics {
 	
@@ -20,6 +21,8 @@ public class Statistics {
 			writer.println("Number of cycles taken = " + numberOfCycles);
 			writer.println("Number of cycles for which OF was stalled = " + numberOfDataStalls);
 			writer.println("Number of times instructions on wrong branch entered pipeline = " + numberOfWrongPaths);
+			writer.println("Throughput (IPC) = " + (float)numberOfInstructions/numberOfCycles);
+			writer.println("Time taken = " + Clock.getCurrentTime());
 			
 			// TODO add code here to print statistics in the output file
 			

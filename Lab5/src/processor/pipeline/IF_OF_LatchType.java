@@ -8,6 +8,7 @@ public class IF_OF_LatchType {
 	public IF_OF_LatchType()
 	{
 		OF_enable = false;
+		isOF_busy = false;
 	}
 
 	public void setBubble(boolean bub){
