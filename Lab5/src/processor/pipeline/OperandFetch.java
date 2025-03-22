@@ -64,7 +64,7 @@ public class OperandFetch {
 			IF_OF_Latch.isBubble = false;
 			return;
 		}
-		if (IF_OF_Latch.isOF_enable() && DLU.stalls == 0) {
+		if (IF_OF_Latch.isOF_enable() || DLU.shouldResume()) {
 			OF_EX_Latch.isBubble = false;
 			System.out.println("Performing OF!!!!!!");
 			
@@ -199,7 +199,7 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, imm2);
 					System.out.println(currentPC);
-					OF_EX_Latch.setBt(currentPC + op3 - 1);
+					OF_EX_Latch.setBt(currentPC + op3);
 
 					break;
 

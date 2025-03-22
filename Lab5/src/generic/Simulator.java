@@ -73,7 +73,7 @@ public class Simulator {
 		processor.setRegisterFile(registerFile);
 		int x = 0;
 
-		while(simulationComplete == false && x <= 800)
+		while(simulationComplete == false)
 		{
 			System.out.println("CLOCK: "+Clock.getCurrentTime());
 			System.out.println("v CYCLE "+x++);

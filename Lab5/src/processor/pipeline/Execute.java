@@ -143,6 +143,7 @@ public class Execute {
 
 			// branches
 			case "blt":
+				System.out.println("EX BLT: "+op1+" < "+op2+"?");
 				System.out.println((op1 < op2) ? "----\nBRANCHING to PC = "+OF_EX_Latch.branchTgt : "Not branching");
 				EX_IF_Latch.setBranch((op1 < op2) ? OF_EX_Latch.branchTgt : -1);
 				EX_IF_Latch.setIF_enable(true);
@@ -150,6 +151,7 @@ public class Execute {
 				if(op1 < op2) BLU.handleBranchTaken();
 				break;
 			case "bgt":
+				System.out.println("EX BLT: "+op1+" > "+op2+"?");
 				System.out.println((op1 > op2) ? "----\nBRANCHING to PC = "+OF_EX_Latch.branchTgt : "Not branching");
 				EX_IF_Latch.setBranch((op1 > op2) ? OF_EX_Latch.branchTgt : -1);
 				EX_IF_Latch.setIF_enable(true);
@@ -157,6 +159,7 @@ public class Execute {
 				if(op1 > op2) BLU.handleBranchTaken();
 				break;
 			case "beq":
+			System.out.println("EX BLT: "+op1+" = "+op2+"?");
 				System.out.println((op1 == op2) ? "----\nBRANCHING to PC = "+OF_EX_Latch.branchTgt : "Not branching");
 				EX_IF_Latch.setBranch((op1 == op2) ? OF_EX_Latch.branchTgt : -1);
 				EX_IF_Latch.setIF_enable(true);
@@ -164,6 +167,7 @@ public class Execute {
 				if(op1 == op2) BLU.handleBranchTaken();
 				break;
 			case "bne":
+				System.out.println("EX BLT: "+op1+" != "+op2+"?");
 				System.out.println((op1 != op2) ? "----\nBRANCHING to PC = "+OF_EX_Latch.branchTgt : "Not branching");
 				EX_IF_Latch.setBranch((op1 != op2) ? OF_EX_Latch.branchTgt : -1);
 				EX_IF_Latch.setIF_enable(true);

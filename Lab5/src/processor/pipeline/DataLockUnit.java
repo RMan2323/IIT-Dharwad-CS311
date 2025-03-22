@@ -10,6 +10,7 @@ public class DataLockUnit {
     EX_MA_LatchType MA;
     MA_RW_LatchType RW;
     int stalls, pass;
+    boolean wasStalled;
 
     public DataLockUnit(Processor containingProcessor, IF_EnableLatchType iF_en, InstructionFetch iF_unit, OF_EX_LatchType eX_unit, EX_MA_LatchType mA_unit, MA_RW_LatchType rW_unit){
         this.containingProcessor = containingProcessor;
@@ -20,6 +21,7 @@ public class DataLockUnit {
         this.RW = rW_unit;
         this.stalls = 0;
         this.pass = 0;
+        wasStalled = false;
     }
 
     public void checkConflicts(int rsA1, int rsA2){
@@ -36,6 +38,7 @@ public class DataLockUnit {
             stalls = 3;
             Statistics.numberOfDataStalls+=3;
             pass++;
+            wasStalled = true;
             return;
         }
 
@@ -50,6 +53,7 @@ public class DataLockUnit {
             stalls = 2;
             Statistics.numberOfDataStalls+=2;
             pass++;
+            wasStalled = true;
             return;
         }
 
@@ -63,6 +67,7 @@ public class DataLockUnit {
             stalls = 1;
             Statistics.numberOfDataStalls+=1;
             pass++;
+            wasStalled = true;
             return;
         }
     }
@@ -78,5 +83,13 @@ public class DataLockUnit {
             IF_en.setIF_enable(true);
             EX.isBubble = false;
         }
+    }
+
+    public boolean shouldResume(){
+        if(wasStalled && (stalls == 0)){
+            wasStalled = false;
+            return true;
+        }
+        else return false;
     }
 }
