@@ -29,7 +29,7 @@ public class DataLockUnit {
         
         //OF-EX Conflict
         rBd = EX.rd;
-        System.out.println("EX: "+rsA1 + " " + rsA2 + " " + rBd + " " + EX.writeTo31);
+        // System.out.println("EX: "+rsA1 + " " + rsA2 + " " + rBd + " " + EX.writeTo31);
         if(((rBd == rsA1 || rBd == rsA2) && (rBd != -1)) || ((rsA1 == 31 || rsA2 == 31) && (EX.writeTo31))){
             //stall IF and OF
             //in EX stage, put three bubbles
@@ -44,7 +44,7 @@ public class DataLockUnit {
 
         //OF-MA Conflict
         rBd = MA.rd;
-        System.out.println("MA: "+rsA1 + " " + rsA2 + " " + rBd + " " + MA.writeTo31);
+        // System.out.println("MA: "+rsA1 + " " + rsA2 + " " + rBd + " " + MA.writeTo31);
         if(((rBd == rsA1 || rBd == rsA2) && (rBd != -1)) || ((rsA1 == 31 || rsA2 == 31) && (MA.writeTo31))){
             //stall IF and OF
             //in EX stage, put two bubbles

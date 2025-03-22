@@ -85,7 +85,7 @@ public class OperandFetch {
 
 			OF_EX_Latch.rs1 = op1;
 //			int currentPC = containingProcessor.getRegisterFile().getProgramCounter() - 1;
-			int currentPC = IF_OF_Latch.PC;
+			int currentPC = IF_OF_Latch.PC-1;
 //			System.out.println("\n\nPC: " + currentPC);
 
 			switch (operation) {
@@ -101,7 +101,6 @@ public class OperandFetch {
 				case "sll":
 				case "srl":
 				case "sra":
-				System.out.println("PERFORMED sub");
 					op2str = BinInstruction.substring(10, 15);
 					op2 = registers.get(op2str); // register
 					op3str = BinInstruction.substring(15, 20);
