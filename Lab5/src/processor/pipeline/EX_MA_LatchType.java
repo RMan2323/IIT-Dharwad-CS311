@@ -2,7 +2,7 @@ package processor.pipeline;
 
 public class EX_MA_LatchType {
 	
-	boolean MA_enable, endProg, isBubble, writeTo31;
+	boolean MA_enable, endProg, isBubble, writeTo31, isMA_busy;
 	int aluRes, ldAddr, stAddr, remainder;
 	enum maType{load, store, rw};
 	maType type;
@@ -12,6 +12,7 @@ public class EX_MA_LatchType {
 	public EX_MA_LatchType()
 	{
 		MA_enable = false;
+		isMA_busy = false;
 		rs1 = -1;
 		rs2 = -1;
 		rd = -1;
