@@ -26,25 +26,10 @@ public class InstructionFetch implements Element{
 	}
 
 	public void performIF() {
-		// if(IF_EnableLatch.isIF_enable()){
-		// 	if(IF_EnableLatch.isIF_busy){
-		// 		return;
-		// 	}
-		// 	Simulator.getEventQueue().addEvent(
-		// 		new MemoryReadEvent(
-		// 			Clock.getCurrentTime() + Configuration.mainMemoryLatency,
-		// 			this,
-		// 			containingProcessor.getMainMemory(),
-		// 			containingProcessor.getRegisterFile().getProgramCounter())
-		// 	);
-		// }
 		if (IF_EnableLatch.isIF_enable() && !EX_IF_Latch.isIF_enable()) {
 			System.out.println("Performing IF!!!!!!");
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
-			// int newInstruction = containingProcessor.getMainMemory().getWord(currentPC);
-
-			// IF_OF_Latch.setInstruction(newInstruction);
-			IF_OF_Latch.PC = currentPC;
+			
 			if(IF_EnableLatch.isIF_busy){
 				// IF_OF_Latch.isBubble = true;
 				return;
@@ -62,15 +47,11 @@ public class InstructionFetch implements Element{
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 			System.out.println("IF: Queued Mem Access to time "+ (Clock.getCurrentTime() + Configuration.mainMemoryLatency));
 
-			// IF_OF_Latch.setOF_enable(true);
 		} else if (IF_EnableLatch.isIF_enable() && EX_IF_Latch.isIF_enable()) {
 			System.out.println("Performing IF!!!!!!");
 			int currentPC = (EX_IF_Latch.getPC() == -1) ? containingProcessor.getRegisterFile().getProgramCounter() : EX_IF_Latch.PC;
 			System.out.println((EX_IF_Latch.getPC() == -1) ? "Next PC" : "Branched to " + EX_IF_Latch.PC);
-			// int newInstruction = containingProcessor.getMainMemory().getWord(currentPC);
-
-			// IF_OF_Latch.setInstruction(newInstruction);
-			IF_OF_Latch.PC = currentPC;
+			
 			if(IF_EnableLatch.isIF_busy){
 				// IF_OF_Latch.isBubble = true;
 				return;
@@ -89,7 +70,6 @@ public class InstructionFetch implements Element{
 
 			EX_IF_Latch.setIF_enable(false);
 			System.out.println("IF: Queued Mem Access to time "+ (Clock.getCurrentTime() + Configuration.mainMemoryLatency));
-			// IF_OF_Latch.setOF_enable(true);
 		}
 		IF_EnableLatch.setIF_enable(false);
 	}
@@ -102,6 +82,7 @@ public class InstructionFetch implements Element{
 		} else{
 			MemoryResponseEvent event = (MemoryResponseEvent) e;
 			IF_OF_Latch.setInstruction(event.getValue());
+			IF_OF_Latch.PC = event.getAddr();
 			IF_OF_Latch.setOF_enable(true);
 			IF_EnableLatch.isIF_busy = false;
 			System.out.println("OF Enabled!");

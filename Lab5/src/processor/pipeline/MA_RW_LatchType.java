@@ -27,6 +27,7 @@ public class MA_RW_LatchType {
 	}
 
 	public void setRes(int result){
+		System.out.println("MA-RW Latch: Got result "+result);
 		res = result;
 	}
 

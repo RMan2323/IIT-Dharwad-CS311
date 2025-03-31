@@ -14,7 +14,7 @@ import generic.Event;
 @SuppressWarnings("unused")
 public class MemoryAccess implements Element {
 	Processor containingProcessor;
-	EX_MA_LatchType EX_MA_Latch;
+	public EX_MA_LatchType EX_MA_Latch;
 	MA_RW_LatchType MA_RW_Latch;
 
 	public MemoryAccess(Processor containingProcessor, EX_MA_LatchType eX_MA_Latch, MA_RW_LatchType mA_RW_Latch) {
@@ -24,7 +24,6 @@ public class MemoryAccess implements Element {
 	}
 
 	public void performMA() {
-		// int instruction = EX_MA_Latch.instruction;
 		if(EX_MA_Latch.isMA_busy) return;
 		if(EX_MA_Latch.isBubble) {
 			System.out.println("MA Bubble");
@@ -52,22 +51,19 @@ public class MemoryAccess implements Element {
 				switch (EX_MA_Latch.type) {
 					case store:
 						Simulator.getEventQueue().addEvent(
-							new MemoryWriteEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.stAddr, EX_MA_Latch.data)
+							new MemoryWriteEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.stAddr, EX_MA_Latch.data, EX_MA_Latch.isMA_busy)
 						);
-						// containingProcessor.getMainMemory().setWord(EX_MA_Latch.stAddr, EX_MA_Latch.data);
 						System.out.println("MA: Will store "+EX_MA_Latch.data+" into address "+EX_MA_Latch.stAddr+" at time "+Clock.getCurrentTime()+Configuration.mainMemoryLatency);
 						EX_MA_Latch.isMA_busy = true;
 						break;
 					case load:
-						// containingProcessor.getRegisterFile().setValue(EX_MA_Latch.rd, containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr));
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
 						Simulator.getEventQueue().addEvent(
 							new MemoryReadEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.ldAddr)
 						);
-						System.out.println("MA: Gettin data at "+EX_MA_Latch.ldAddr+" into register "+EX_MA_Latch.rd+" at time "+Clock.getCurrentTime()+Configuration.mainMemoryLatency);
+						System.out.println("MA: Getting data at "+EX_MA_Latch.ldAddr+" into register "+EX_MA_Latch.rd+" at time "+(Clock.getCurrentTime()+Configuration.mainMemoryLatency));
 						EX_MA_Latch.isMA_busy = true;
 						break;
-						// MA_RW_Latch.setRes(containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr));
 					default:
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
 						MA_RW_Latch.setRes(EX_MA_Latch.aluRes);
@@ -90,9 +86,12 @@ public class MemoryAccess implements Element {
 			MA_RW_Latch.setRW_enable(true);
 			EX_MA_Latch.isMA_busy = false;
 		} else{
+			MemoryResponseEvent event = (MemoryResponseEvent) e;
 			System.out.println("MA: LOADING " + containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr) + " into register " + EX_MA_Latch.rd);
+			System.out.println("(Value is "+event.getValue()+")");
 			MA_RW_Latch.setRW_enable(true);
 			EX_MA_Latch.isMA_busy = false;
+			MA_RW_Latch.setRes(event.getValue());
 		}
 	}
 }

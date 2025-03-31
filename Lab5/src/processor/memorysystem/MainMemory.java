@@ -1,11 +1,11 @@
 package processor.memorysystem;
 
-// import java.time.Clock;
 import processor.Clock;
 import generic.Element;
 import generic.Event;
 import generic.MemoryReadEvent;
 import generic.MemoryResponseEvent;
+import generic.MemoryWriteEvent;
 import generic.Simulator;
 import generic.Event.EventType;
 
@@ -39,9 +39,16 @@ public class MainMemory implements Element {
 
 	@Override
 	public void handleEvent(Event e) {
+		System.out.println("MA: GOT EVENT OF TYPE "+e.getEventType());
 		if(e.getEventType() == EventType.MemoryRead){
 			MemoryReadEvent event = (MemoryReadEvent) e;
-			Simulator.getEventQueue().addEvent(new MemoryResponseEvent(Clock.getCurrentTime(), this, event.getRequestingElement(), getWord(event.getAddressToReadFrom())));
+			Simulator.getEventQueue().addEvent(new MemoryResponseEvent(Clock.getCurrentTime(), this, event.getRequestingElement(), getWord(event.getAddressToReadFrom()), event.getAddressToReadFrom()));
+		}
+		else{
+			MemoryWriteEvent event = (MemoryWriteEvent) e;
+			setWord(event.getAddressToWriteTo(), event.getValue());
+			System.out.println("MA: SETTING WORD---------------------");
+			event.isMA_busy = false;
 		}
 	}
 }

@@ -57,6 +57,19 @@ public class OperandFetch {
 	}
 
 	public void performOF() {
+		if(IF_OF_Latch.branchBubble > 0){
+			IF_OF_Latch.branchBubble--;
+			IF_OF_Latch.setOF_enable(false);
+			OF_EX_Latch.isBubble = true;
+			return;
+		}
+
+		if(OF_EX_Latch.isEX_busy){
+			IF_OF_Latch.isOF_busy = true;
+			return;
+		}
+		IF_OF_Latch.isOF_busy = false;
+
 		if(IF_OF_Latch.isBubble && IF_OF_Latch.isOF_enable() && DLU.stalls == 0){
 			System.out.println("OF Bubble");
 			IF_OF_Latch.setOF_enable(false);
@@ -64,7 +77,8 @@ public class OperandFetch {
 			IF_OF_Latch.isBubble = false;
 			return;
 		}
-		if (IF_OF_Latch.isOF_enable() || DLU.shouldResume()) {
+
+		if(IF_OF_Latch.isOF_enable() || DLU.shouldResume()){
 			OF_EX_Latch.isBubble = false;
 			System.out.println("Performing OF!!!!!!");
 			
@@ -82,11 +96,11 @@ public class OperandFetch {
 			int op3 = 0;
 
 			int imm1 = 0, imm2 = 0, imm3 = 0;
-
+			System.out.println("OF: Instruction "+instruction);
+			System.out.println("OF: Operation: "+operation);
 			OF_EX_Latch.rs1 = op1;
-//			int currentPC = containingProcessor.getRegisterFile().getProgramCounter() - 1;
+
 			int currentPC = IF_OF_Latch.PC-1;
-//			System.out.println("\n\nPC: " + currentPC);
 
 			switch (operation) {
 				// R3
@@ -112,7 +126,6 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, imm2);
 					OF_EX_Latch.rs2 = op2;
-					// System.out.println("OF: Adding");
 
 					if(operation == "div") {OF_EX_Latch.writeTo31 = true; System.out.println(operation + " Set true");}
 					else OF_EX_Latch.writeTo31 = false;
@@ -143,7 +156,6 @@ public class OperandFetch {
 					OF_EX_Latch.rs2 = -1;
 
 					if(operation == "divi") {OF_EX_Latch.writeTo31 = true; System.out.println(operation + " Set true");}
-					// else OF_EX_Latch.writeTo31 = false;
 
 					break;
 
@@ -165,7 +177,7 @@ public class OperandFetch {
 						op2 = Integer.parseInt(op2str, 2);
 					}
 
-					OF_EX_Latch.setBt(currentPC + op2);
+					OF_EX_Latch.setBt(currentPC + op2+1);
 
 					break;
 
@@ -198,7 +210,7 @@ public class OperandFetch {
 
 					OF_EX_Latch.setImm(imm1, imm2);
 					System.out.println(currentPC);
-					OF_EX_Latch.setBt(currentPC + op3);
+					OF_EX_Latch.setBt(currentPC + op3+1);
 
 					break;
 
@@ -206,7 +218,6 @@ public class OperandFetch {
 					OF_EX_Latch.rs1 = -1;
 					OF_EX_Latch.rs2 = -1;
 					OF_EX_Latch.rd = -1;
-//					System.out.println(operation);
 					OF_EX_Latch.setImm(0, 0);
 					System.out.println("OF: Got end");
 					OF_EX_Latch.endPC = IF_OF_Latch.PC;
@@ -229,6 +240,7 @@ public class OperandFetch {
 					break;
 
 				case "store":
+					System.out.println("OF: Got STORE instruction");
 					imm1 = (containingProcessor.getRegisterFile()).getValue(op1);
 					op2str = BinInstruction.substring(10, 15);
 					op2 = registers.get(op2str); // register
@@ -258,8 +270,5 @@ public class OperandFetch {
 			OF_EX_Latch.setEX_enable(true);
 			System.out.println("OF: SET EX TO ENABLE");
 		}
-		// else{
-		// 	DLU.insertBubbles();
-		// }
 	}
 }

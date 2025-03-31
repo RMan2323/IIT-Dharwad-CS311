@@ -3,12 +3,13 @@ package processor.pipeline;
 public class IF_OF_LatchType {
 	
 	boolean OF_enable, isBubble, isOF_busy;
-	int instruction, PC;
+	int instruction, PC, branchBubble;
 	
 	public IF_OF_LatchType()
 	{
 		OF_enable = false;
 		isOF_busy = false;
+		branchBubble = 0;
 	}
 
 	public void setBubble(boolean bub){

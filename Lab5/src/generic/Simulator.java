@@ -14,7 +14,7 @@ public class Simulator {
 	static Processor processor;
 	static boolean simulationComplete;
 	static RegisterFile registerFile = new RegisterFile();  //create registerFile
-	static MainMemory mem = new MainMemory();  //create memory space
+	static MainMemory mem = new MainMemory();
 	static EventQueue eventQueue = new EventQueue();
 	
 	public static void setupSimulation(String assemblyProgramFile, Processor p)
