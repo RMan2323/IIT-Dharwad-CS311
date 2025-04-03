@@ -57,21 +57,31 @@ public class OperandFetch {
 	}
 
 	public void performOF() {
+		int instruction = IF_OF_Latch.getInstruction();
+		String BinInstruction = String.format("%32s", Integer.toBinaryString(instruction)).replace(" ", "0");
+		String opcode = BinInstruction.substring(0, 5);
+		String operation = opcodes.get(opcode);
+		System.out.println(IF_OF_Latch.PC + " " + operation);
+
+		if(OF_EX_Latch.isEX_busy){
+			IF_OF_Latch.isOF_busy = true;
+			return;
+		}
+
 		if(IF_OF_Latch.branchBubble > 0){
+			System.out.println("OF Bubble 1");
+			// IF_OF_Latch.isOF_busy = true;
 			IF_OF_Latch.branchBubble--;
 			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.isBubble = true;
 			return;
 		}
 
-		if(OF_EX_Latch.isEX_busy){
-			IF_OF_Latch.isOF_busy = true;
-			return;
-		}
 		IF_OF_Latch.isOF_busy = false;
 
 		if(IF_OF_Latch.isBubble && IF_OF_Latch.isOF_enable() && DLU.stalls == 0){
-			System.out.println("OF Bubble");
+			System.out.println("OF Bubble 2");
+			// IF_OF_Latch.isOF_busy = true;
 			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.isBubble = true;
 			IF_OF_Latch.isBubble = false;
@@ -82,10 +92,10 @@ public class OperandFetch {
 			OF_EX_Latch.isBubble = false;
 			System.out.println("Performing OF!!!!!!");
 			
-			int instruction = IF_OF_Latch.getInstruction();
-			String BinInstruction = String.format("%32s", Integer.toBinaryString(instruction)).replace(" ", "0");
-			String opcode = BinInstruction.substring(0, 5);
-			String operation = opcodes.get(opcode);
+			// int instruction = IF_OF_Latch.getInstruction();
+			// String BinInstruction = String.format("%32s", Integer.toBinaryString(instruction)).replace(" ", "0");
+			// String opcode = BinInstruction.substring(0, 5);
+			// String operation = opcodes.get(opcode);
 			String op1str = BinInstruction.substring(5, 10);
 			int op1 = registers.get(op1str);
 
@@ -96,11 +106,10 @@ public class OperandFetch {
 			int op3 = 0;
 
 			int imm1 = 0, imm2 = 0, imm3 = 0;
-			System.out.println("OF: Instruction "+instruction);
-			System.out.println("OF: Operation: "+operation);
+			// System.out.println("OF: Operation: "+operation);
 			OF_EX_Latch.rs1 = op1;
 
-			int currentPC = IF_OF_Latch.PC-1;
+			int currentPC = IF_OF_Latch.PC;
 
 			switch (operation) {
 				// R3
@@ -161,7 +170,6 @@ public class OperandFetch {
 
 				// RI
 				case "jmp":
-					System.out.println("Jump instruction!");
 					OF_EX_Latch.rs1 = -1;
 					OF_EX_Latch.rs2 = -1;
 					OF_EX_Latch.rd = -1;
@@ -177,7 +185,7 @@ public class OperandFetch {
 						op2 = Integer.parseInt(op2str, 2);
 					}
 
-					OF_EX_Latch.setBt(currentPC + op2+1);
+					OF_EX_Latch.setBt(currentPC + op2);
 
 					break;
 
@@ -185,7 +193,6 @@ public class OperandFetch {
 				case "bne":
 				case "blt":
 				case "bgt":
-					System.out.println("Branch instruction!");
 					op2str = BinInstruction.substring(10, 15);
 					op2 = registers.get(op2str); // register
 
@@ -209,8 +216,8 @@ public class OperandFetch {
 					imm2 = (containingProcessor.getRegisterFile()).getValue(op2);
 
 					OF_EX_Latch.setImm(imm1, imm2);
-					System.out.println(currentPC);
-					OF_EX_Latch.setBt(currentPC + op3+1);
+					// System.out.println(currentPC);
+					OF_EX_Latch.setBt(currentPC + op3);
 
 					break;
 

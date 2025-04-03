@@ -12,7 +12,7 @@ public class BranchLockUnit {
     Execute EX_unit;
 
     public BranchLockUnit(Processor containingProcessor, IF_EnableLatchType iF_en, InstructionFetch iF_unit,
-            OF_EX_LatchType eX, IF_OF_LatchType oF) {
+        OF_EX_LatchType eX, IF_OF_LatchType oF) {
         this.containingProcessor = containingProcessor;
         this.IF_en = iF_en;
         this.OF = oF;
@@ -22,8 +22,8 @@ public class BranchLockUnit {
 
     public void handleBranchTaken() {
         EX.isBranchBubble = true;
-        OF.setBubble(true);
-        // OF.branchBubble = 2;
+        // OF.setBubble(true);
+        // OF.branchBubble = 1;
 
         System.out.println("BRANCHING AND INSERTING BUBBLES");
         Statistics.numberOfWrongPaths++;

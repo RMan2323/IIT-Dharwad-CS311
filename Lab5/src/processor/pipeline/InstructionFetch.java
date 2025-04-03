@@ -31,7 +31,12 @@ public class InstructionFetch implements Element{
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
 			
 			if(IF_EnableLatch.isIF_busy){
-				// IF_OF_Latch.isBubble = true;
+				// System.out.println("IF Busy");
+				// if(!IF_EnableLatch.isIF_stalled){
+					// System.out.println("IF Busy so inserting bubble at 1");
+					// IF_OF_Latch.isBubble = true;
+				// 	IF_EnableLatch.isIF_stalled = false;
+				// }
 				return;
 			}
 			System.out.println("IF: Getting instruction at PC: "+currentPC);
@@ -50,10 +55,15 @@ public class InstructionFetch implements Element{
 		} else if (IF_EnableLatch.isIF_enable() && EX_IF_Latch.isIF_enable()) {
 			System.out.println("Performing IF!!!!!!");
 			int currentPC = (EX_IF_Latch.getPC() == -1) ? containingProcessor.getRegisterFile().getProgramCounter() : EX_IF_Latch.PC;
-			System.out.println((EX_IF_Latch.getPC() == -1) ? "Next PC" : "Branched to " + EX_IF_Latch.PC);
+			System.out.println((EX_IF_Latch.getPC() == -1) ? "Next PC " + containingProcessor.getRegisterFile().getProgramCounter() : "Branched to " + EX_IF_Latch.PC);
 			
 			if(IF_EnableLatch.isIF_busy){
-				// IF_OF_Latch.isBubble = true;
+				// System.out.println("IF Busy");
+				// if(!IF_EnableLatch.isIF_stalled){
+				System.out.println("IF Busy so inserting bubble at 2");
+					IF_OF_Latch.isBubble = true;
+				// 	IF_EnableLatch.isIF_stalled = false;
+				// }
 				return;
 			}
 			System.out.println("IF: Getting instruction at PC: "+currentPC);
@@ -76,7 +86,7 @@ public class InstructionFetch implements Element{
 
 	@Override
 	public void handleEvent(Event e){
-		if(IF_OF_Latch.isOF_busy){
+		if(IF_OF_Latch.isOF_busy || IF_EnableLatch.isIF_stalled){
 			e.setEventTime(Clock.getCurrentTime()+1);
 			Simulator.getEventQueue().addEvent(e);
 		} else{

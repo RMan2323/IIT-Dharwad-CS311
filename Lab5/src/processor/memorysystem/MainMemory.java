@@ -39,7 +39,7 @@ public class MainMemory implements Element {
 
 	@Override
 	public void handleEvent(Event e) {
-		System.out.println("MA: GOT EVENT OF TYPE "+e.getEventType());
+		// System.out.println("MA: Got event of type "+e.getEventType());
 		if(e.getEventType() == EventType.MemoryRead){
 			MemoryReadEvent event = (MemoryReadEvent) e;
 			Simulator.getEventQueue().addEvent(new MemoryResponseEvent(Clock.getCurrentTime(), this, event.getRequestingElement(), getWord(event.getAddressToReadFrom()), event.getAddressToReadFrom()));
@@ -47,8 +47,9 @@ public class MainMemory implements Element {
 		else{
 			MemoryWriteEvent event = (MemoryWriteEvent) e;
 			setWord(event.getAddressToWriteTo(), event.getValue());
-			System.out.println("MA: SETTING WORD---------------------");
+			System.out.println("MA: Setting word");
 			event.isMA_busy = false;
+			event.EX_MA_Latch.isMA_busy = false;
 		}
 	}
 }

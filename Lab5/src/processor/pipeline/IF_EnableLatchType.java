@@ -2,12 +2,13 @@ package processor.pipeline;
 
 public class IF_EnableLatchType {
 	
-	boolean IF_enable, isIF_busy;
+	boolean IF_enable, isIF_busy, isIF_stalled;
 	
 	public IF_EnableLatchType()
 	{
 		IF_enable = true;
 		isIF_busy = false;
+		isIF_stalled = false;
 	}
 
 	public boolean isIF_enable() {

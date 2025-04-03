@@ -75,12 +75,14 @@ public class DataLockUnit {
     public void insertBubbles(){
         if(stalls > 0){
             IF_en.setIF_enable(false);
+            IF_en.isIF_stalled = true;
             System.out.println("Stalled for "+stalls);
             stalls--;
             EX.isBubble = true;
         }
         else{
             IF_en.setIF_enable(true);
+            IF_en.isIF_stalled = false;
             EX.isBubble = false;
         }
     }

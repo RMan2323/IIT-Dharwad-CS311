@@ -76,22 +76,23 @@ public class Simulator {
 		while(simulationComplete == false)
 		{
 			System.out.println("CLOCK: "+Clock.getCurrentTime());
-			System.out.println("v CYCLE "+x++);
+			System.out.println("v CYCLE "+x++ + " RW:");
 			processor.getRWUnit().performRW();
 			if(simulationComplete) break;
 
-			System.out.println("v CYCLE "+x++);
+			System.out.println("\nv CYCLE "+x++ + " MA:");
 			processor.getMAUnit().performMA();
 			
-			System.out.println("v CYCLE "+x++);
+			System.out.println("\nv CYCLE "+x++ + " EX:");
 			processor.getEXUnit().performEX();
 			
+			System.out.println("\nProcess events:");
 			eventQueue.processEvents();
 			
-			System.out.println("v CYCLE "+x++);
+			System.out.println("\nv CYCLE "+x++ + " OF:");
 			processor.getOFUnit().performOF();
 			
-			System.out.println("v CYCLE "+x++);
+			System.out.println("\nv CYCLE "+x++ + " IF:");
 			processor.getDLUnit().insertBubbles();
 			processor.getIFUnit().performIF();
 

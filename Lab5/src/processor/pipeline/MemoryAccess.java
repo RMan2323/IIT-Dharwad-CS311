@@ -24,7 +24,10 @@ public class MemoryAccess implements Element {
 	}
 
 	public void performMA() {
-		if(EX_MA_Latch.isMA_busy) return;
+		if(EX_MA_Latch.isMA_busy){
+			System.out.println("MA is busy");
+			return;
+		}
 		if(EX_MA_Latch.isBubble) {
 			System.out.println("MA Bubble");
 			MA_RW_Latch.isBubble = true;
@@ -51,7 +54,7 @@ public class MemoryAccess implements Element {
 				switch (EX_MA_Latch.type) {
 					case store:
 						Simulator.getEventQueue().addEvent(
-							new MemoryWriteEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.stAddr, EX_MA_Latch.data, EX_MA_Latch.isMA_busy)
+							new MemoryWriteEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.stAddr, EX_MA_Latch.data, EX_MA_Latch.isMA_busy, EX_MA_Latch)
 						);
 						System.out.println("MA: Will store "+EX_MA_Latch.data+" into address "+EX_MA_Latch.stAddr+" at time "+Clock.getCurrentTime()+Configuration.mainMemoryLatency);
 						EX_MA_Latch.isMA_busy = true;
@@ -81,17 +84,11 @@ public class MemoryAccess implements Element {
 	
 	@Override
 	public void handleEvent(Event e){
-		if(e.getEventType() == EventType.MemoryWrite){
-			System.out.println("MA: STORED " + EX_MA_Latch.data + " into address " + EX_MA_Latch.stAddr);
-			MA_RW_Latch.setRW_enable(true);
-			EX_MA_Latch.isMA_busy = false;
-		} else{
-			MemoryResponseEvent event = (MemoryResponseEvent) e;
-			System.out.println("MA: LOADING " + containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr) + " into register " + EX_MA_Latch.rd);
-			System.out.println("(Value is "+event.getValue()+")");
-			MA_RW_Latch.setRW_enable(true);
-			EX_MA_Latch.isMA_busy = false;
-			MA_RW_Latch.setRes(event.getValue());
-		}
+		MemoryResponseEvent event = (MemoryResponseEvent) e;
+		System.out.println("MA: LOADING " + containingProcessor.getMainMemory().getWord(EX_MA_Latch.ldAddr) + " into register " + EX_MA_Latch.rd);
+		System.out.println("(Value is "+event.getValue()+")");
+		MA_RW_Latch.setRW_enable(true);
+		EX_MA_Latch.isMA_busy = false;
+		MA_RW_Latch.setRes(event.getValue());
 	}
 }

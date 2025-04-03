@@ -26,26 +26,23 @@ public class RegisterWrite {
 		if (MA_RW_Latch.isRW_enable()) {
 			MA_RW_Latch.setRW_enable(false);
 			System.out.println("Performing RW!!!!!!");
-			// System.out.println("RW "+MA_RW_Latch.endProg);
 
 			if (MA_RW_Latch.endProg) {
 				Simulator.setSimulationComplete(true);
 				containingProcessor.getRegisterFile().setProgramCounter(MA_RW_Latch.endPC);
-				// System.out.println("----\nENDING at "+MA_RW_Latch.endPC);
 			} else {
 				if (MA_RW_Latch.rd != -1) {
 					containingProcessor.getRegisterFile().setValue(MA_RW_Latch.rd, MA_RW_Latch.res);
-					System.out.println("----\nPUTTING " + MA_RW_Latch.res + " in register " + MA_RW_Latch.rd);
+					System.out.println("RW: PUTTING " + MA_RW_Latch.res + " in register " + MA_RW_Latch.rd);
 					containingProcessor.getRegisterFile().setValue(31, MA_RW_Latch.rem);
-					System.out.println("----\nPUTTING " + MA_RW_Latch.rem + " in register 31");
+					System.out.println("RW: PUTTING " + MA_RW_Latch.rem + " in register 31");
 					if(MA_RW_Latch.writeTo31){
-						System.out.println("REMAINDER WRITTEN TO 31!!!!!!!!!!!!!!!!!!!!");
 						MA_RW_Latch.writeTo31 = false;
 					}
+					MA_RW_Latch.rd = -1;
 				}
 			}
 			IF_EnableLatch.setIF_enable(true);
 		}
-
 	}
 }

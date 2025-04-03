@@ -24,25 +24,40 @@ public class Execute {
 
 	public void performEX() {
 		// OF_EX_Latch.setEX_enable(false);
-		System.out.println(EX_MA_Latch.isMA_busy);
+		// System.out.println(EX_MA_Latch.isMA_busy);
+		System.out.println("\t"+OF_EX_Latch.operation);
 		if (EX_MA_Latch.isMA_busy) {
 			OF_EX_Latch.isEX_busy = true;
 			OF_EX_Latch.isBubble = false;
 			return;
 		}
 
-		if (OF_EX_Latch.isBubble || OF_EX_Latch.isBranchBubble) {
+		if (OF_EX_Latch.isBubble) {
 			OF_EX_Latch.setEX_enable(false);
-			System.out.println("EX Bubble " + OF_EX_Latch.operation);
+			OF_EX_Latch.isEX_busy = false;
+			System.out.println("\tEX Bubble (RAW)");
 			EX_MA_Latch.isBubble = true;
 			EX_MA_Latch.rd = -1;
 			OF_EX_Latch.rd = -1;
 			if (EX_MA_Latch.writeTo31)
 				EX_MA_Latch.writeTo31 = false;
 			OF_EX_Latch.writeTo31 = false;
-			if (OF_EX_Latch.isBranchBubble)
-				OF_EX_Latch.isBranchBubble = false;
 			OF_EX_Latch.isBubble = false;
+			return;
+		}
+
+		if(OF_EX_Latch.isBranchBubble){
+			OF_EX_Latch.setEX_enable(false);
+			OF_EX_Latch.isEX_busy = false;
+			System.out.println("\tEX Bubble (Branch)");
+			EX_MA_Latch.isBubble = true;
+			EX_MA_Latch.rd = -1;
+			OF_EX_Latch.rd = -1;
+			if (EX_MA_Latch.writeTo31)
+				EX_MA_Latch.writeTo31 = false;
+			OF_EX_Latch.writeTo31 = false;
+			OF_EX_Latch.isBranchBubble = false;
+			// OF_EX_Latch.isBubble = false;
 			return;
 		}
 		OF_EX_Latch.isEX_busy = false;
@@ -50,7 +65,7 @@ public class Execute {
 		if (OF_EX_Latch.isEX_enable()) {
 			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.isBubble = false;
-			System.out.println("Performing EX!!!!!!");
+			System.out.println("\tPerforming EX!!!!!!");
 			Statistics.setNumberOfInstructions(Statistics.numberOfInstructions + 1);
 			int op1 = OF_EX_Latch.imm1, op2 = OF_EX_Latch.imm2;
 

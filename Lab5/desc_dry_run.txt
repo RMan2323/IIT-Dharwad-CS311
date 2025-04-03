@@ -1,0 +1,36 @@
+main
+09: x3 = 0		sub
+10: x4 = 0		sub
+11: x8 = 8		load
+
+outerloop
+12: 0 < 8? Yes		blt
+
+innerloop
+15: x4 = 1		addi
+
+innerloopz
+16: 1 < 8? Yes		blt
+
+swap
+19: x5 = 40		load
+20: x6 = 20		load
+21: 40 < 20? No		blt
+22: x4 = 2		addi
+23: jmp innerloopz	jmp
+
+innerloopz
+16: 2 < 8? Yes		blt
+
+swap:
+19: x5 = 40		load
+20: x6 = 50		load
+21: 40 < 50? Yes	blt
+
+exchange
+24: x7 = 0		sub
+25: x7 = 40		add
+26: [0+0] = 50		store
+27: [0+2] = 40		store
+28: x4 = 3		addi
+29: jmp innerloopz	jmp
