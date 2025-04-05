@@ -69,11 +69,19 @@ public class OperandFetch {
 			return;
 		}
 
+		if(!IF_OF_Latch.isCorrect){
+			System.out.println("NOT CORRECT");
+			OF_EX_Latch.isBubble = true;
+			// IF_OF_Latch.isCorrect = true;
+			return;
+		}
+
 		if(IF_OF_Latch.branchBubble > 0){
 			System.out.println("OF Bubble 1");
 			// IF_OF_Latch.isOF_busy = true;
 			IF_OF_Latch.branchBubble--;
 			IF_OF_Latch.setOF_enable(false);
+			IF_OF_Latch.isCorrect = false;
 			OF_EX_Latch.isBubble = true;
 			return;
 		}
@@ -86,6 +94,7 @@ public class OperandFetch {
 			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.isBubble = true;
 			IF_OF_Latch.isBubble = false;
+			IF_OF_Latch.isCorrect = false;
 			return;
 		}
 

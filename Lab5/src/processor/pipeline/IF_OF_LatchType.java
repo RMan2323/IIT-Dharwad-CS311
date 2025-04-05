@@ -2,13 +2,14 @@ package processor.pipeline;
 
 public class IF_OF_LatchType {
 	
-	boolean OF_enable, isBubble, isOF_busy;
+	boolean OF_enable, isBubble, isOF_busy, isCorrect;
 	int instruction, PC, branchBubble;
 	
 	public IF_OF_LatchType()
 	{
 		OF_enable = false;
 		isOF_busy = false;
+		isCorrect = true;
 		branchBubble = 0;
 	}
 

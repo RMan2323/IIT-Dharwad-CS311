@@ -60,8 +60,8 @@ public class InstructionFetch implements Element{
 			if(IF_EnableLatch.isIF_busy){
 				// System.out.println("IF Busy");
 				// if(!IF_EnableLatch.isIF_stalled){
-				System.out.println("IF Busy so inserting bubble at 2");
-					IF_OF_Latch.isBubble = true;
+				// System.out.println("IF Busy so inserting bubble at 2");
+					// IF_OF_Latch.isBubble = true;
 				// 	IF_EnableLatch.isIF_stalled = false;
 				// }
 				return;
@@ -77,7 +77,7 @@ public class InstructionFetch implements Element{
 			);
 			IF_EnableLatch.isIF_busy = true;
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
-
+			// IF_OF_Latch.isCorrect = false;
 			EX_IF_Latch.setIF_enable(false);
 			System.out.println("IF: Queued Mem Access to time "+ (Clock.getCurrentTime() + Configuration.mainMemoryLatency));
 		}
@@ -95,6 +95,7 @@ public class InstructionFetch implements Element{
 			IF_OF_Latch.PC = event.getAddr();
 			IF_OF_Latch.setOF_enable(true);
 			IF_EnableLatch.isIF_busy = false;
+			if(!IF_OF_Latch.isCorrect) IF_OF_Latch.isCorrect = true;
 			System.out.println("OF Enabled!");
 		}
 	}

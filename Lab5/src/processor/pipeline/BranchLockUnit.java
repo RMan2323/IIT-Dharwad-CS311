@@ -23,7 +23,7 @@ public class BranchLockUnit {
     public void handleBranchTaken() {
         EX.isBranchBubble = true;
         // OF.setBubble(true);
-        // OF.branchBubble = 1;
+        OF.branchBubble = 2;
 
         System.out.println("BRANCHING AND INSERTING BUBBLES");
         Statistics.numberOfWrongPaths++;
