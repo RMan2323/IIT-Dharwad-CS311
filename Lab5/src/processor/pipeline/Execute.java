@@ -26,6 +26,10 @@ public class Execute {
 		// OF_EX_Latch.setEX_enable(false);
 		// System.out.println(EX_MA_Latch.isMA_busy);
 		System.out.println("\t"+OF_EX_Latch.operation);
+		if(OF_EX_Latch.isInstructionBubble){
+			EX_MA_Latch.isBubble = true;
+			return;
+		}
 		if (EX_MA_Latch.isMA_busy) {
 			OF_EX_Latch.isEX_busy = true;
 			OF_EX_Latch.isBubble = false;

@@ -4,8 +4,6 @@ import java.io.PrintWriter;
 import processor.Clock;
 
 public class Statistics {
-	
-	// TODO add your statistics here
 	public static int numberOfInstructions;
 	static int numberOfCycles;
 	public static int numberOfDataStalls;
@@ -24,8 +22,6 @@ public class Statistics {
 			writer.println("Throughput (IPC) = " + (float)numberOfInstructions/numberOfCycles);
 			writer.println("Time taken = " + Clock.getCurrentTime());
 			
-			// TODO add code here to print statistics in the output file
-			
 			writer.close();
 		}
 		catch(Exception e)
@@ -34,7 +30,6 @@ public class Statistics {
 		}
 	}
 	
-	// TODO write functions to update statistics
 	public static void setNumberOfInstructions(int numberOfInstructions) {
 		Statistics.numberOfInstructions = numberOfInstructions;
 	}

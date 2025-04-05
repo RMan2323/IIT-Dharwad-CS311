@@ -35,6 +35,7 @@ public class MemoryAccess implements Element {
 			if(MA_RW_Latch.writeTo31) MA_RW_Latch.writeTo31 = false;
 			EX_MA_Latch.setMA_enable(false);
 			MA_RW_Latch.setRW_enable(true);
+			EX_MA_Latch.rd = -1;
 			return;
 		}
 		if(!EX_MA_Latch.isMA_enable()){
@@ -71,9 +72,9 @@ public class MemoryAccess implements Element {
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
 						MA_RW_Latch.setRes(EX_MA_Latch.aluRes);
 						MA_RW_Latch.rem = EX_MA_Latch.remainder;
+						MA_RW_Latch.setRW_enable(true);
 						break;
 				}
-			MA_RW_Latch.setRW_enable(true);
 			MA_RW_Latch.rs1 = EX_MA_Latch.rs1;
 			MA_RW_Latch.rs2 = EX_MA_Latch.rs2;
 			MA_RW_Latch.rd = EX_MA_Latch.rd;

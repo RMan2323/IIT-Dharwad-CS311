@@ -65,6 +65,7 @@ public class OperandFetch {
 
 		if(OF_EX_Latch.isEX_busy){
 			IF_OF_Latch.isOF_busy = true;
+			System.out.println("OF Busy because EX Busy");
 			return;
 		}
 
@@ -267,10 +268,13 @@ public class OperandFetch {
 			}
 			if(DLU.pass == 1 && (OF_EX_Latch.rs1 == OF_EX_Latch.rd || OF_EX_Latch.rs2 == OF_EX_Latch.rd)){
 				DLU.pass = 0;
+				OF_EX_Latch.isInstructionBubble = false;
 			}
 			else{
 				DLU.pass = 0;
-				DLU.checkConflicts(OF_EX_Latch.rs1, OF_EX_Latch.rs2);
+				if(DLU.checkConflicts(OF_EX_Latch.rs1, OF_EX_Latch.rs2)){
+					OF_EX_Latch.isInstructionBubble = true;
+				} else OF_EX_Latch.isInstructionBubble = false;
 			}
 			OF_EX_Latch.setOperation(operation);
 			IF_OF_Latch.setOF_enable(false);

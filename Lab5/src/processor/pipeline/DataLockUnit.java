@@ -24,7 +24,7 @@ public class DataLockUnit {
         wasStalled = false;
     }
 
-    public void checkConflicts(int rsA1, int rsA2){
+    public boolean checkConflicts(int rsA1, int rsA2){
         int rBd;
         
         //OF-EX Conflict
@@ -39,7 +39,7 @@ public class DataLockUnit {
             Statistics.numberOfDataStalls+=3;
             pass++;
             wasStalled = true;
-            return;
+            return true;
         }
 
         //OF-MA Conflict
@@ -54,7 +54,7 @@ public class DataLockUnit {
             Statistics.numberOfDataStalls+=2;
             pass++;
             wasStalled = true;
-            return;
+            return true;
         }
 
         //OF-RW Conflict
@@ -68,8 +68,9 @@ public class DataLockUnit {
             Statistics.numberOfDataStalls+=1;
             pass++;
             wasStalled = true;
-            return;
+            return true;
         }
+        return false;
     }
 
     public void insertBubbles(){
