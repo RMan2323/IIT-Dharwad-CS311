@@ -247,6 +247,8 @@ public class Execute {
 			EX_MA_Latch.writeTo31 = OF_EX_Latch.writeTo31;
 			if (EX_MA_Latch.writeTo31)
 				EX_MA_Latch.writeTo31 = false;
+			OF_EX_Latch.rd = -1;
+			OF_EX_Latch.writeTo31 = false;
 		}
 	}
 }
