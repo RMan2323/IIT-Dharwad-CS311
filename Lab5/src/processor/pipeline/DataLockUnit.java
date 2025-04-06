@@ -49,7 +49,7 @@ public class DataLockUnit {
             //stall IF and OF
             //in EX stage, put two bubbles
             System.out.println("OF-MA CONFLICT!");
-            System.out.println(rsA1 + " " + rsA2 + " " + rBd + " " + EX.writeTo31);
+            System.out.println(rsA1 + " " + rsA2 + " " + rBd + " " + MA.writeTo31);
             stalls = 2;
             Statistics.numberOfDataStalls+=2;
             pass++;

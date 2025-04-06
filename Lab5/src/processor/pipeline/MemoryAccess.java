@@ -79,7 +79,8 @@ public class MemoryAccess implements Element {
 			MA_RW_Latch.rs2 = EX_MA_Latch.rs2;
 			MA_RW_Latch.rd = EX_MA_Latch.rd;
 			MA_RW_Latch.writeTo31 = EX_MA_Latch.writeTo31;
-			if(MA_RW_Latch.writeTo31) MA_RW_Latch.writeTo31 = false;
+			EX_MA_Latch.writeTo31 = false;
+			// if(MA_RW_Latch.writeTo31) MA_RW_Latch.writeTo31 = false;
 		}
 	}
 	

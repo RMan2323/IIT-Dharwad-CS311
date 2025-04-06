@@ -302,8 +302,8 @@ public class Execute implements Element{
 			EX_MA_Latch.rs2 = OF_EX_Latch.rs2;
 			EX_MA_Latch.rd = OF_EX_Latch.rd;
 			EX_MA_Latch.writeTo31 = OF_EX_Latch.writeTo31;
-			if (EX_MA_Latch.writeTo31)
-				EX_MA_Latch.writeTo31 = false;
+			// if (EX_MA_Latch.writeTo31)
+			// 	EX_MA_Latch.writeTo31 = false;
 			OF_EX_Latch.rd = -1;
 			OF_EX_Latch.writeTo31 = false;
 		}
@@ -317,6 +317,8 @@ public class Execute implements Element{
 		} else{
 			ExecutionCompleteEvent event = (ExecutionCompleteEvent) e;
 			EX_MA_Latch.setAluRes(event.value);
+			if(event.writeTo31)
+				EX_MA_Latch.remainder = event.rem;
 			// MemoryResponseEvent event = (MemoryResponseEvent) e;
 			// IF_OF_Latch.setInstruction(event.getValue());
 			// IF_OF_Latch.PC = event.getAddr();

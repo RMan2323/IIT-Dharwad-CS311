@@ -63,7 +63,7 @@ public class OperandFetch {
 		String operation = opcodes.get(opcode);
 		System.out.println(IF_OF_Latch.PC + " " + operation);
 
-		if(OF_EX_Latch.isEX_busy){
+		if(OF_EX_Latch.isEX_busy || OF_EX_Latch.isEX_processing){
 			IF_OF_Latch.isOF_busy = true;
 			System.out.println("OF Busy because EX Busy");
 			return;
