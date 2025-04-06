@@ -4,9 +4,17 @@ import processor.Processor;
 import processor.pipeline.EX_MA_LatchType.maType;
 import processor.pipeline.BranchLockUnit;
 import generic.Statistics;
+// import generic.ArithmeticEvent;
+import generic.Element;
+import generic.Event;
+import generic.ExecutionCompleteEvent;
+import generic.MemoryResponseEvent;
+import generic.Simulator;
+import processor.Clock;
+import configuration.Configuration;
 
 @SuppressWarnings("unused")
-public class Execute {
+public class Execute implements Element{
 	Processor containingProcessor;
 	OF_EX_LatchType OF_EX_Latch;
 	EX_MA_LatchType EX_MA_Latch;
@@ -31,6 +39,7 @@ public class Execute {
 			return;
 		}
 		if (EX_MA_Latch.isMA_busy) {
+			System.out.println("EX busy because MA busy");
 			OF_EX_Latch.isEX_busy = true;
 			OF_EX_Latch.isBubble = false;
 			return;
@@ -66,6 +75,10 @@ public class Execute {
 		}
 		OF_EX_Latch.isEX_busy = false;
 
+		if(OF_EX_Latch.isEX_processing){
+			return;
+		}
+
 		if (OF_EX_Latch.isEX_enable()) {
 			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.isBubble = false;
@@ -76,96 +89,140 @@ public class Execute {
 			switch (OF_EX_Latch.operation) {
 				case "add":
 				case "addi":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 + op2);
+					// EX_MA_Latch.setAluRes(op1 + op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1+op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "mul":
 				case "muli":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 * op2);
+					// EX_MA_Latch.setAluRes(op1 * op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.multiplier_latency, this, OF_EX_Latch.rd, op1*op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.multiplier_latency));
 					break;
 				case "sub":
 				case "subi":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 - op2);
+					// EX_MA_Latch.setAluRes(op1 - op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1-op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "div":
 				case "divi":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 / op2);
-					EX_MA_Latch.setRemainder(op1 % op2);
+					// EX_MA_Latch.setAluRes(op1 / op2);
+					// EX_MA_Latch.setRemainder(op1 % op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.divider_latency, this, OF_EX_Latch.rd, op1/op2, true, op1%op2));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.divider_latency));
 					break;
 				case "and":
 				case "andi":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 & op2);
+					// EX_MA_Latch.setAluRes(op1 & op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1 & op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "or":
 				case "ori":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 | op2);
+					// EX_MA_Latch.setAluRes(op1 | op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1 | op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "xor":
 				case "xori":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 ^ op2);
+					// EX_MA_Latch.setAluRes(op1 ^ op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1 ^ op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "slt":
 				case "slti":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes((op1 < op2) ? 1 : 0);
+					// EX_MA_Latch.setAluRes((op1 < op2) ? 1 : 0);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+					
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, (op1 < op2) ? 1 : 0 , false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "sll":
 				case "slli":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 << op2);
+					// EX_MA_Latch.setAluRes(op1 << op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1 << op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "srl":
 				case "srli":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 >>> op2);
+					// EX_MA_Latch.setAluRes(op1 >>> op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1 >>> op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 				case "sra":
 				case "srai":
-					EX_MA_Latch.setMA_enable(true);
+					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					EX_MA_Latch.setAluRes(op1 >> op2);
+					// EX_MA_Latch.setAluRes(op1 >> op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
+
+					Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime()+Configuration.ALU_latency, this, OF_EX_Latch.rd, op1 >> op2, false, 0));
+					OF_EX_Latch.isEX_processing = true;
+					System.out.println("EX will complete at "+(Clock.getCurrentTime()+Configuration.ALU_latency));
 					break;
 
 				// branches
@@ -249,6 +306,26 @@ public class Execute {
 				EX_MA_Latch.writeTo31 = false;
 			OF_EX_Latch.rd = -1;
 			OF_EX_Latch.writeTo31 = false;
+		}
+	}
+
+	@Override
+	public void handleEvent(Event e){
+		if(EX_MA_Latch.isMA_busy){
+			e.setEventTime(Clock.getCurrentTime()+1);
+			Simulator.getEventQueue().addEvent(e);
+		} else{
+			ExecutionCompleteEvent event = (ExecutionCompleteEvent) e;
+			EX_MA_Latch.setAluRes(event.value);
+			// MemoryResponseEvent event = (MemoryResponseEvent) e;
+			// IF_OF_Latch.setInstruction(event.getValue());
+			// IF_OF_Latch.PC = event.getAddr();
+			EX_MA_Latch.MA_enable = true;
+			// IF_OF_Latch.setOF_enable(true);
+			OF_EX_Latch.isEX_processing = false;
+			// IF_EnableLatch.isIF_busy = false;
+			// if(!IF_OF_Latch.isCorrect) IF_OF_Latch.isCorrect = true;
+			System.out.println("MA Enabled!");
 		}
 	}
 }

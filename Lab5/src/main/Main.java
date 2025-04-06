@@ -16,6 +16,7 @@ public class Main {
 		// {
 		// 	Misc.printErrorAndExit("usage: java -jar <path-to-jar-file> <path-to-config-file> <path-to-stat-file> <path-to-object-file>\n");
 		// }
+
 		// if(args.length != 1)
 		// {
 		// 	Misc.printErrorAndExit("usage: java -jar <path-to-jar-file> <path-to-object-file>\n");
@@ -26,6 +27,7 @@ public class Main {
 		Processor processor = new Processor();
 		
 		// Simulator.setupSimulation(args[2], processor);
+
 		// Simulator.setupSimulation(args[0], processor);
 		Simulator.setupSimulation("test_cases\\descending.out", processor);
 		Simulator.simulate();
