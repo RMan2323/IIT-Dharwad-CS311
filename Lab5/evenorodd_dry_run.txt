@@ -1,0 +1,6 @@
+1 load	x3 = 11
+2 divi	x3 = 5, x31 = 1
+3 beq	0 == 1? Don't branch
+4 sub	x10 = 0
+5 addi	x10 = 1
+6 end

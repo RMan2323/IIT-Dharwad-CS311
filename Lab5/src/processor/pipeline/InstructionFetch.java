@@ -31,12 +31,6 @@ public class InstructionFetch implements Element{
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
 			
 			if(IF_EnableLatch.isIF_busy){
-				// System.out.println("IF Busy");
-				// if(!IF_EnableLatch.isIF_stalled){
-					// System.out.println("IF Busy so inserting bubble at 1");
-					// IF_OF_Latch.isBubble = true;
-				// 	IF_EnableLatch.isIF_stalled = false;
-				// }
 				return;
 			}
 			System.out.println("IF: Getting instruction at PC: "+currentPC);
@@ -58,12 +52,6 @@ public class InstructionFetch implements Element{
 			System.out.println((EX_IF_Latch.getPC() == -1) ? "Next PC " + containingProcessor.getRegisterFile().getProgramCounter() : "Branched to " + EX_IF_Latch.PC);
 			
 			if(IF_EnableLatch.isIF_busy){
-				// System.out.println("IF Busy");
-				// if(!IF_EnableLatch.isIF_stalled){
-				// System.out.println("IF Busy so inserting bubble at 2");
-					// IF_OF_Latch.isBubble = true;
-				// 	IF_EnableLatch.isIF_stalled = false;
-				// }
 				return;
 			}
 			System.out.println("IF: Getting instruction at PC: "+currentPC);
@@ -77,7 +65,6 @@ public class InstructionFetch implements Element{
 			);
 			IF_EnableLatch.isIF_busy = true;
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
-			// IF_OF_Latch.isCorrect = false;
 			EX_IF_Latch.setIF_enable(false);
 			System.out.println("IF: Queued Mem Access to time "+ (Clock.getCurrentTime() + Configuration.mainMemoryLatency));
 		}

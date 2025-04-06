@@ -39,7 +39,6 @@ public class MainMemory implements Element {
 
 	@Override
 	public void handleEvent(Event e) {
-		// System.out.println("MA: Got event of type "+e.getEventType());
 		if(e.getEventType() == EventType.MemoryRead){
 			MemoryReadEvent event = (MemoryReadEvent) e;
 			Simulator.getEventQueue().addEvent(new MemoryResponseEvent(Clock.getCurrentTime(), this, event.getRequestingElement(), getWord(event.getAddressToReadFrom()), event.getAddressToReadFrom()));

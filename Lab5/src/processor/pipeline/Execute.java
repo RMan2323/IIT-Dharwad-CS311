@@ -4,7 +4,6 @@ import processor.Processor;
 import processor.pipeline.EX_MA_LatchType.maType;
 import processor.pipeline.BranchLockUnit;
 import generic.Statistics;
-// import generic.ArithmeticEvent;
 import generic.Element;
 import generic.Event;
 import generic.ExecutionCompleteEvent;
@@ -31,8 +30,6 @@ public class Execute implements Element{
 	}
 
 	public void performEX() {
-		// OF_EX_Latch.setEX_enable(false);
-		// System.out.println(EX_MA_Latch.isMA_busy);
 		System.out.println("\t"+OF_EX_Latch.operation);
 		if(OF_EX_Latch.isInstructionBubble){
 			EX_MA_Latch.isBubble = true;
@@ -70,7 +67,6 @@ public class Execute implements Element{
 				EX_MA_Latch.writeTo31 = false;
 			OF_EX_Latch.writeTo31 = false;
 			OF_EX_Latch.isBranchBubble = false;
-			// OF_EX_Latch.isBubble = false;
 			return;
 		}
 		OF_EX_Latch.isEX_busy = false;
@@ -89,9 +85,7 @@ public class Execute implements Element{
 			switch (OF_EX_Latch.operation) {
 				case "add":
 				case "addi":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 + op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
@@ -102,9 +96,7 @@ public class Execute implements Element{
 					break;
 				case "mul":
 				case "muli":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 * op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
@@ -115,9 +107,7 @@ public class Execute implements Element{
 					break;
 				case "sub":
 				case "subi":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 - op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
@@ -128,10 +118,7 @@ public class Execute implements Element{
 					break;
 				case "div":
 				case "divi":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 / op2);
-					// EX_MA_Latch.setRemainder(op1 % op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 
@@ -141,9 +128,7 @@ public class Execute implements Element{
 					break;
 				case "and":
 				case "andi":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 & op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					OF_EX_Latch.writeTo31 = false;
@@ -154,9 +139,7 @@ public class Execute implements Element{
 					break;
 				case "or":
 				case "ori":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 | op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 
@@ -166,9 +149,7 @@ public class Execute implements Element{
 					break;
 				case "xor":
 				case "xori":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 ^ op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 
@@ -178,9 +159,7 @@ public class Execute implements Element{
 					break;
 				case "slt":
 				case "slti":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes((op1 < op2) ? 1 : 0);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 					
@@ -190,9 +169,7 @@ public class Execute implements Element{
 					break;
 				case "sll":
 				case "slli":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 << op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 
@@ -202,9 +179,7 @@ public class Execute implements Element{
 					break;
 				case "srl":
 				case "srli":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 >>> op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 
@@ -214,9 +189,7 @@ public class Execute implements Element{
 					break;
 				case "sra":
 				case "srai":
-					// EX_MA_Latch.setMA_enable(true);
 					EX_IF_Latch.setIF_enable(false);
-					// EX_MA_Latch.setAluRes(op1 >> op2);
 					EX_MA_Latch.setMaType(maType.rw);
 					EX_MA_Latch.rd = OF_EX_Latch.rd;
 
@@ -302,8 +275,6 @@ public class Execute implements Element{
 			EX_MA_Latch.rs2 = OF_EX_Latch.rs2;
 			EX_MA_Latch.rd = OF_EX_Latch.rd;
 			EX_MA_Latch.writeTo31 = OF_EX_Latch.writeTo31;
-			// if (EX_MA_Latch.writeTo31)
-			// 	EX_MA_Latch.writeTo31 = false;
 			OF_EX_Latch.rd = -1;
 			OF_EX_Latch.writeTo31 = false;
 		}
@@ -319,14 +290,8 @@ public class Execute implements Element{
 			EX_MA_Latch.setAluRes(event.value);
 			if(event.writeTo31)
 				EX_MA_Latch.remainder = event.rem;
-			// MemoryResponseEvent event = (MemoryResponseEvent) e;
-			// IF_OF_Latch.setInstruction(event.getValue());
-			// IF_OF_Latch.PC = event.getAddr();
 			EX_MA_Latch.MA_enable = true;
-			// IF_OF_Latch.setOF_enable(true);
 			OF_EX_Latch.isEX_processing = false;
-			// IF_EnableLatch.isIF_busy = false;
-			// if(!IF_OF_Latch.isCorrect) IF_OF_Latch.isCorrect = true;
 			System.out.println("MA Enabled!");
 		}
 	}

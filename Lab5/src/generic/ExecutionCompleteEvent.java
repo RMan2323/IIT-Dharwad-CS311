@@ -12,5 +12,4 @@ public class ExecutionCompleteEvent extends Event {
 		this.writeTo31 = writeTo31;
 		this.rem = rem;
 	}
-
 }
