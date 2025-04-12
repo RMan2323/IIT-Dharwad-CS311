@@ -73,7 +73,7 @@ public class MemoryAccess implements Element {
 					case load:
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
 						int value = containingProcessor.getCache().cacheDataRead(EX_MA_Latch.ldAddr);
-						int cacheLatency = containingProcessor.getCache().latency;
+						int cacheLatency = containingProcessor.getCache().dataLatency;
 						// Simulator.getEventQueue().addEvent(
 						// 	new MemoryReadEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.ldAddr)
 						// );

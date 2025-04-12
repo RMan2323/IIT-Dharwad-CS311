@@ -47,7 +47,7 @@ public class InstructionFetch implements Element{
 			if (containingProcessor.getCache().wasInstHit) {
 				//cache hit: use cache latency and schedule immediate response
 				// System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
-				int cacheLatency = containingProcessor.getCache().latency;
+				int cacheLatency = containingProcessor.getCache().instLatency;
 				Simulator.getEventQueue().addEvent(
 					new MemoryResponseEvent(
 						Clock.getCurrentTime() + cacheLatency,
@@ -97,7 +97,7 @@ public class InstructionFetch implements Element{
 			if (containingProcessor.getCache().wasInstHit) {
 				//cache hit: use cache latency and schedule immediate response
 				// System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
-				int cacheLatency = containingProcessor.getCache().latency;
+				int cacheLatency = containingProcessor.getCache().instLatency;
 				int value = containingProcessor.getCache().cacheInstRead(currentPC);
 				Simulator.getEventQueue().addEvent(
 					new MemoryResponseEvent(

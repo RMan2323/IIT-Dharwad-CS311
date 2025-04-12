@@ -4,7 +4,7 @@ import generic.Statistics;
 
 public class Cache {
     CacheLine cacheLinesData[], cacheLinesInst[];
-    public int size, latency, tag_len, index_len;
+    public int dataSize, dataLatency, dataTagLen, dataIndexLen,instSize, instLatency, instTagLen, instIndexLen;
     public MainMemory memory;
     public boolean wasDataHit, wasInstHit;
     int[] dataLRU, instLRU;
@@ -18,57 +18,64 @@ public class Cache {
     //tag of 16-lg(size/8) bits
     //int logBase2 = (int) (Math.log(x) / Math.log(2));
 
-    public Cache(int size, int latency){
-        this.size = size;
-        this.latency = latency;
-        this.cacheLinesData = new CacheLine[size/4];
-        for(int i = 0; i < cacheLinesData.length; i++) cacheLinesData[i] = new CacheLine();
-        this.cacheLinesInst = new CacheLine[size/4];
-        for(int i = 0; i < cacheLinesInst.length; i++) cacheLinesInst[i] = new CacheLine();
-        this.index_len = (int)(Math.log(size/8) / Math.log(2));
-        this.tag_len = 16-index_len;
+    public Cache(int dataSize, int dataLatency, int instSize, int instLatency) {
+        this.dataSize = dataSize;
+        this.dataLatency = dataLatency;
+        this.instSize = instSize;
+        this.instLatency = instLatency;
+
+        this.cacheLinesData = new CacheLine[dataSize / 4];
+        for (int i = 0; i < cacheLinesData.length; i++) cacheLinesData[i] = new CacheLine();
+
+        this.cacheLinesInst = new CacheLine[instSize / 4];
+        for (int i = 0; i < cacheLinesInst.length; i++) cacheLinesInst[i] = new CacheLine();
+
+        this.dataIndexLen = (int)(Math.log(dataSize / 8) / Math.log(2));
+        this.dataTagLen = 16 - dataIndexLen;
+
+        this.instIndexLen = (int)(Math.log(instSize / 8) / Math.log(2));
+        this.instTagLen = 16 - instIndexLen;
+
         this.wasDataHit = false;
         this.wasInstHit = false;
-        this.dataLRU = new int[size/8];
-        this.instLRU = new int[size/8];
+
+        this.dataLRU = new int[dataSize / 8];
+        this.instLRU = new int[instSize / 8];
     }
 
-    //Data cache functions
-    public int cacheDataRead(int addr){
-        //convert addr to binary
+    //data cache
+    public int cacheDataRead(int addr) {
         //take lower index_len bits and go to index
         //take upper tag_len bits and compare with two lines
-        int index = (addr >> 0) & ((1 << index_len) - 1);
-        int tag = addr >> index_len;
+        int index = (addr >> 0) & ((1 << dataIndexLen) - 1);
+        int tag = addr >> dataIndexLen;
         int setStart = index * 2;
 
-        //search both lines in the set
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesData[i].valid && cacheLinesData[i].tag == tag) {
                 wasDataHit = true;
                 dataLRU[index] = (i == setStart) ? 0 : 1;
                 System.out.println("Cache Read: Hit");
-                // Statistics.dataHits++;
                 return cacheLinesData[i].data;
             }
         }
         System.out.println("Cache Read: Miss");
-        // Statistics.dataMisses++;
-        //call handleCacheMiss() if not present
         wasDataHit = false;
         return handleDataCacheMiss(addr, true);
     }
 
-    public void cacheDataWrite(int addr, int value){
-        int index = (addr >> 0) & ((1 << index_len) - 1);
-        int tag = addr >> index_len;
+    public void cacheDataWrite(int addr, int value) {
+        //take lower index_len bits and go to index
+        //take upper tag_len bits and compare with two lines
+        int index = (addr >> 0) & ((1 << dataIndexLen) - 1);
+        int tag = addr >> dataIndexLen;
         int setStart = index * 2;
 
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesData[i].valid && cacheLinesData[i].tag == tag) {
                 cacheLinesData[i].data = value;
                 dataLRU[index] = (i == setStart) ? 0 : 1;
-                memory.setWord(addr, value); //write-through
+                memory.setWord(addr, value);
                 System.out.println("Cache Write: Hit");
                 Statistics.dataHits++;
                 return;
@@ -76,20 +83,19 @@ public class Cache {
         }
         System.out.println("Cache Write: Miss");
         Statistics.dataMisses++;
-        //call handleCacheMiss() if not present
         handleDataCacheMiss(addr, false);
         cacheDataWrite(addr, value);
     }
 
-    public int handleDataCacheMiss(int addr, boolean isRead){
-        int index = (addr >> 0) & ((1 << index_len) - 1);
-        int tag = addr >> index_len;
+    public int handleDataCacheMiss(int addr, boolean isRead) {
+        //take lower index_len bits and go to index
+        //take upper tag_len bits and compare with two lines
+        int index = (addr >> 0) & ((1 << dataIndexLen) - 1);
+        int tag = addr >> dataIndexLen;
         int setStart = index * 2;
 
-        System.out.println("handleCacheMiss: Got value "+memory.getWord(addr)+" at address "+addr);
         int value = memory.getWord(addr);
 
-        //replace first invalid or use index 0
         int replacementIndex = -1;
         for (int i = setStart; i < setStart + 2; i++) {
             if (!cacheLinesData[i].valid) {
@@ -105,68 +111,60 @@ public class Cache {
 
         dataLRU[index] = (replacementIndex == setStart) ? 0 : 1;
 
-        System.out.println("handleCacheMiss: Put data "+value+" at index "+replacementIndex+" with tag "+tag);
+        System.out.println("handleCacheMiss: Put data " + value + " at index " + replacementIndex + " with tag " + tag);
 
         return isRead ? value : 0;
     }
 
-    //Inst cache functions
-    public int cacheInstRead(int addr){
-        //convert addr to binary
+    //instruction cache
+    public int cacheInstRead(int addr) {
         //take lower index_len bits and go to index
         //take upper tag_len bits and compare with two lines
-        int index = (addr >> 0) & ((1 << index_len) - 1);
-        int tag = addr >> index_len;
+        int index = (addr >> 0) & ((1 << instIndexLen) - 1);
+        int tag = addr >> instIndexLen;
         int setStart = index * 2;
 
-        //search both lines in the set
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesInst[i].valid && cacheLinesInst[i].tag == tag) {
                 wasInstHit = true;
                 instLRU[index] = (i == setStart) ? 0 : 1;
                 System.out.println("Cache Read: Hit");
-                // Statistics.instHits++;
                 return cacheLinesInst[i].data;
             }
         }
         System.out.println("Cache Read: Miss");
-        // Statistics.instMisses++;
-        //call handleCacheMiss() if not present
         wasInstHit = false;
         return handleInstCacheMiss(addr, true);
     }
 
-    public void cacheInstWrite(int addr, int value){
-        int index = (addr >> 0) & ((1 << index_len) - 1);
-        int tag = addr >> index_len;
+    public void cacheInstWrite(int addr, int value) {
+        //take lower index_len bits and go to index
+        //take upper tag_len bits and compare with two lines
+        int index = (addr >> 0) & ((1 << instIndexLen) - 1);
+        int tag = addr >> instIndexLen;
         int setStart = index * 2;
 
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesInst[i].valid && cacheLinesInst[i].tag == tag) {
                 cacheLinesInst[i].data = value;
                 instLRU[index] = (i == setStart) ? 0 : 1;
-                memory.setWord(addr, value); //write-through
+                memory.setWord(addr, value);
                 System.out.println("Cache Write: Hit");
-                // Statistics.instHits++;
                 return;
             }
         }
         System.out.println("Cache Write: Miss");
-        // Statistics.instMisses++;
-        //call handleCacheMiss() if not present
         handleInstCacheMiss(addr, false);
         cacheInstWrite(addr, value);
     }
 
-    public int handleInstCacheMiss(int addr, boolean isRead){
-        int index = (addr >> 0) & ((1 << index_len) - 1);
-        int tag = addr >> index_len;
+    public int handleInstCacheMiss(int addr, boolean isRead) {
+        int index = (addr >> 0) & ((1 << instIndexLen) - 1);
+        int tag = addr >> instIndexLen;
         int setStart = index * 2;
 
-        System.out.println("handleCacheMiss: Got value "+memory.getWord(addr)+" at address "+addr);
         int value = memory.getWord(addr);
 
-        //replace first invalid or use index 0
         int replacementIndex = -1;
         for (int i = setStart; i < setStart + 2; i++) {
             if (!cacheLinesInst[i].valid) {
@@ -182,7 +180,7 @@ public class Cache {
 
         instLRU[index] = (replacementIndex == setStart) ? 0 : 1;
 
-        System.out.println("handleCacheMiss: Put Inst "+value+" at index "+replacementIndex+" with tag "+tag);
+        System.out.println("handleCacheMiss: Put Inst " + value + " at index " + replacementIndex + " with tag " + tag);
 
         return isRead ? value : 0;
     }
