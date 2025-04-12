@@ -3,6 +3,7 @@ package processor;
 import javax.xml.crypto.Data;
 
 import processor.memorysystem.MainMemory;
+import processor.memorysystem.Cache;
 import processor.pipeline.DataLockUnit;
 import processor.pipeline.EX_IF_LatchType;
 import processor.pipeline.EX_MA_LatchType;
@@ -23,6 +24,7 @@ public class Processor {
 	
 	RegisterFile registerFile;
 	MainMemory mainMemory;
+	Cache cache;
 	
 	IF_EnableLatchType IF_EnableLatch;
 	IF_OF_LatchType IF_OF_Latch;
@@ -43,6 +45,7 @@ public class Processor {
 	{
 		registerFile = new RegisterFile();
 		mainMemory = new MainMemory();
+		this.cache = new Cache(128, 1);
 		
 		IF_EnableLatch = new IF_EnableLatchType();
 		IF_OF_Latch = new IF_OF_LatchType();
@@ -84,6 +87,10 @@ public class Processor {
 	public void setMainMemory(MainMemory mainMemory) {
 		this.mainMemory = mainMemory;
 	}
+
+	public Cache getCache() {
+        return cache;
+    }
 
 	public InstructionFetch getIFUnit() {
 		return IFUnit;

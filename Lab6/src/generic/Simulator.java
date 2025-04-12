@@ -70,6 +70,7 @@ public class Simulator {
 		Statistics.numberOfDataStalls = 0;
 		Statistics.numberOfWrongPaths = 0;
 		processor.setMainMemory(mem);
+		processor.getCache().memory = mem;
 		processor.setRegisterFile(registerFile);
 		int x = 0;
 

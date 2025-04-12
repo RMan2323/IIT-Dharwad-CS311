@@ -54,18 +54,55 @@ public class MemoryAccess implements Element {
 			} else
 				switch (EX_MA_Latch.type) {
 					case store:
+						containingProcessor.getCache().cacheWrite(EX_MA_Latch.stAddr, EX_MA_Latch.data);
 						Simulator.getEventQueue().addEvent(
-							new MemoryWriteEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.stAddr, EX_MA_Latch.data, EX_MA_Latch.isMA_busy, EX_MA_Latch)
+							new MemoryWriteEvent(
+								Clock.getCurrentTime()+Configuration.mainMemoryLatency,
+								this,
+								containingProcessor.getMainMemory(),
+								EX_MA_Latch.stAddr,
+								EX_MA_Latch.data,
+								EX_MA_Latch.isMA_busy,
+								EX_MA_Latch
+							)
 						);
 						System.out.println("MA: Will store "+EX_MA_Latch.data+" into address "+EX_MA_Latch.stAddr+" at time "+Clock.getCurrentTime()+Configuration.mainMemoryLatency);
 						EX_MA_Latch.isMA_busy = true;
 						break;
 					case load:
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
-						Simulator.getEventQueue().addEvent(
-							new MemoryReadEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.ldAddr)
-						);
-						System.out.println("MA: Getting data at "+EX_MA_Latch.ldAddr+" into register "+EX_MA_Latch.rd+" at time "+(Clock.getCurrentTime()+Configuration.mainMemoryLatency));
+						int value = containingProcessor.getCache().cacheRead(EX_MA_Latch.ldAddr);
+						int cacheLatency = containingProcessor.getCache().latency;
+						// Simulator.getEventQueue().addEvent(
+						// 	new MemoryReadEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.ldAddr)
+						// );
+						// System.out.println("MA: Getting data at "+EX_MA_Latch.ldAddr+" into register "+EX_MA_Latch.rd+" at time "+(Clock.getCurrentTime()+Configuration.mainMemoryLatency));
+
+						if (containingProcessor.getCache().wasHit) {
+							//cache hit: use cache latency and schedule immediate response
+							System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
+							Simulator.getEventQueue().addEvent(
+								new MemoryResponseEvent(
+									Clock.getCurrentTime() + cacheLatency,
+									this,
+									this,
+									value,
+									EX_MA_Latch.ldAddr
+								)
+							);
+						} else {
+							//cache miss: use memory latency
+							System.out.println("MA: Cache MISS at " + EX_MA_Latch.ldAddr + ", scheduling memory read, latency = " + Configuration.mainMemoryLatency);
+							Simulator.getEventQueue().addEvent(
+								new MemoryReadEvent(
+									Clock.getCurrentTime() + Configuration.mainMemoryLatency,
+									this,
+									containingProcessor.getMainMemory(),
+									EX_MA_Latch.ldAddr
+								)
+							);
+						}
+
 						EX_MA_Latch.isMA_busy = true;
 						break;
 					default:
