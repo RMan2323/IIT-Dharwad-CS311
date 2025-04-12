@@ -54,7 +54,7 @@ public class MemoryAccess implements Element {
 			} else
 				switch (EX_MA_Latch.type) {
 					case store:
-						containingProcessor.getCache().cacheWrite(EX_MA_Latch.stAddr, EX_MA_Latch.data);
+						containingProcessor.getCache().cacheDataWrite(EX_MA_Latch.stAddr, EX_MA_Latch.data);
 						Simulator.getEventQueue().addEvent(
 							new MemoryWriteEvent(
 								Clock.getCurrentTime()+Configuration.mainMemoryLatency,
@@ -71,7 +71,7 @@ public class MemoryAccess implements Element {
 						break;
 					case load:
 						MA_RW_Latch.setRd(EX_MA_Latch.rd);
-						int value = containingProcessor.getCache().cacheRead(EX_MA_Latch.ldAddr);
+						int value = containingProcessor.getCache().cacheDataRead(EX_MA_Latch.ldAddr);
 						int cacheLatency = containingProcessor.getCache().latency;
 						// Simulator.getEventQueue().addEvent(
 						// 	new MemoryReadEvent(Clock.getCurrentTime()+Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), EX_MA_Latch.ldAddr)
