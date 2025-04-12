@@ -78,7 +78,7 @@ public class MemoryAccess implements Element {
 						// );
 						// System.out.println("MA: Getting data at "+EX_MA_Latch.ldAddr+" into register "+EX_MA_Latch.rd+" at time "+(Clock.getCurrentTime()+Configuration.mainMemoryLatency));
 
-						if (containingProcessor.getCache().wasHit) {
+						if (containingProcessor.getCache().wasDataHit) {
 							//cache hit: use cache latency and schedule immediate response
 							System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
 							Simulator.getEventQueue().addEvent(

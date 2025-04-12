@@ -34,14 +34,42 @@ public class InstructionFetch implements Element{
 				return;
 			}
 			System.out.println("IF: Getting instruction at PC: "+currentPC);
-			Simulator.getEventQueue().addEvent(
-				new MemoryReadEvent(
-					Clock.getCurrentTime() + Configuration.mainMemoryLatency,
-					this,
-					containingProcessor.getMainMemory(),
-					currentPC
-				)
-			);
+			// Simulator.getEventQueue().addEvent(
+			// 	new MemoryReadEvent(
+			// 		Clock.getCurrentTime() + Configuration.mainMemoryLatency,
+			// 		this,
+			// 		containingProcessor.getMainMemory(),
+			// 		currentPC
+			// 	)
+			// );
+
+			if (containingProcessor.getCache().wasInstHit) {
+				//cache hit: use cache latency and schedule immediate response
+				// System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
+				int cacheLatency = containingProcessor.getCache().latency;
+				int value = containingProcessor.getCache().cacheInstRead(currentPC);
+				Simulator.getEventQueue().addEvent(
+					new MemoryResponseEvent(
+						Clock.getCurrentTime() + cacheLatency,
+						this,
+						this,
+						value,
+						currentPC
+					)
+				);
+			} else {
+				//cache miss: use memory latency
+				// System.out.println("MA: Cache MISS at " + EX_MA_Latch.ldAddr + ", scheduling memory read, latency = " + Configuration.mainMemoryLatency);
+				Simulator.getEventQueue().addEvent(
+					new MemoryReadEvent(
+						Clock.getCurrentTime() + Configuration.mainMemoryLatency,
+						this,
+						containingProcessor.getMainMemory(),
+						currentPC
+					)
+				);
+			}
+
 			IF_EnableLatch.isIF_busy = true;
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 			System.out.println("IF: Queued Mem Access to time "+ (Clock.getCurrentTime() + Configuration.mainMemoryLatency));
@@ -55,14 +83,42 @@ public class InstructionFetch implements Element{
 				return;
 			}
 			System.out.println("IF: Getting instruction at PC: "+currentPC);
-			Simulator.getEventQueue().addEvent(
-				new MemoryReadEvent(
-					Clock.getCurrentTime() + Configuration.mainMemoryLatency,
-					this,
-					containingProcessor.getMainMemory(),
-					currentPC
-				)
-			);
+			// Simulator.getEventQueue().addEvent(
+			// 	new MemoryReadEvent(
+			// 		Clock.getCurrentTime() + Configuration.mainMemoryLatency,
+			// 		this,
+			// 		containingProcessor.getMainMemory(),
+			// 		currentPC
+			// 	)
+			// );
+
+			if (containingProcessor.getCache().wasInstHit) {
+				//cache hit: use cache latency and schedule immediate response
+				// System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
+				int cacheLatency = containingProcessor.getCache().latency;
+				int value = containingProcessor.getCache().cacheInstRead(currentPC);
+				Simulator.getEventQueue().addEvent(
+					new MemoryResponseEvent(
+						Clock.getCurrentTime() + cacheLatency,
+						this,
+						this,
+						value,
+						currentPC
+					)
+				);
+			} else {
+				//cache miss: use memory latency
+				// System.out.println("MA: Cache MISS at " + EX_MA_Latch.ldAddr + ", scheduling memory read, latency = " + Configuration.mainMemoryLatency);
+				Simulator.getEventQueue().addEvent(
+					new MemoryReadEvent(
+						Clock.getCurrentTime() + Configuration.mainMemoryLatency,
+						this,
+						containingProcessor.getMainMemory(),
+						currentPC
+					)
+				);
+			}
+			
 			IF_EnableLatch.isIF_busy = true;
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 			EX_IF_Latch.setIF_enable(false);

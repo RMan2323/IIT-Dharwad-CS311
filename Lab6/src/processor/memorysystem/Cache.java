@@ -4,7 +4,7 @@ public class Cache {
     CacheLine cacheLinesData[], cacheLinesInst[];
     public int size, latency, tag_len, index_len;
     public MainMemory memory;
-    public boolean wasHit;
+    public boolean wasDataHit, wasInstHit;
 
     //there will be size/4 lines
     //each set has 2 lines
@@ -24,7 +24,8 @@ public class Cache {
         for(int i = 0; i < cacheLinesInst.length; i++) cacheLinesInst[i] = new CacheLine();
         this.index_len = (int)(Math.log(size/8) / Math.log(2));
         this.tag_len = 16-index_len;
-        this.wasHit = false;
+        this.wasDataHit = false;
+        this.wasInstHit = false;
     }
 
     //Data cache functions
@@ -39,14 +40,14 @@ public class Cache {
         //search both lines in the set
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesData[i].valid && cacheLinesData[i].tag == tag) {
-                wasHit = true;
+                wasDataHit = true;
                 System.out.println("Cache Read: Hit");
                 return cacheLinesData[i].data;
             }
         }
         System.out.println("Cache Read: Miss");
         //call handleCacheMiss() if not present
-        wasHit = false;
+        wasDataHit = false;
         return handleDataCacheMiss(addr, true);
     }
 
@@ -108,14 +109,14 @@ public class Cache {
         //search both lines in the set
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesInst[i].valid && cacheLinesInst[i].tag == tag) {
-                wasHit = true;
+                wasInstHit = true;
                 System.out.println("Cache Read: Hit");
                 return cacheLinesInst[i].data;
             }
         }
         System.out.println("Cache Read: Miss");
         //call handleCacheMiss() if not present
-        wasHit = false;
+        wasInstHit = false;
         return handleInstCacheMiss(addr, true);
     }
 
