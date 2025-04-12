@@ -69,6 +69,10 @@ public class Simulator {
 		Statistics.setNumberOfInstructions(0);
 		Statistics.numberOfDataStalls = 0;
 		Statistics.numberOfWrongPaths = 0;
+		Statistics.dataHits = 0;
+		Statistics.dataMisses = 0;
+		Statistics.instHits = 0;
+		Statistics.instMisses = 0;
 		processor.setMainMemory(mem);
 		processor.getCache().memory = mem;
 		processor.setRegisterFile(registerFile);

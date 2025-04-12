@@ -6,6 +6,7 @@ import generic.MemoryReadEvent;
 import generic.MemoryResponseEvent;
 import generic.MemoryWriteEvent;
 import generic.Simulator;
+import generic.Statistics;
 import generic.Event.EventType;
 import processor.Clock;
 import processor.Processor;
@@ -90,6 +91,7 @@ public class MemoryAccess implements Element {
 									EX_MA_Latch.ldAddr
 								)
 							);
+							Statistics.dataHits++;
 						} else {
 							//cache miss: use memory latency
 							System.out.println("MA: Cache MISS at " + EX_MA_Latch.ldAddr + ", scheduling memory read, latency = " + Configuration.mainMemoryLatency);
@@ -101,6 +103,7 @@ public class MemoryAccess implements Element {
 									EX_MA_Latch.ldAddr
 								)
 							);
+							Statistics.dataMisses++;
 						}
 
 						EX_MA_Latch.isMA_busy = true;

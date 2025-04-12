@@ -45,7 +45,7 @@ public class Processor {
 	{
 		registerFile = new RegisterFile();
 		mainMemory = new MainMemory();
-		this.cache = new Cache(16, 1);
+		this.cache = new Cache(512, 3);
 		
 		IF_EnableLatch = new IF_EnableLatchType();
 		IF_OF_Latch = new IF_OF_LatchType();

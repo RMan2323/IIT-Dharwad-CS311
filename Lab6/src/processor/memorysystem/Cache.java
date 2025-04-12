@@ -1,10 +1,13 @@
 package processor.memorysystem;
 
+import generic.Statistics;
+
 public class Cache {
     CacheLine cacheLinesData[], cacheLinesInst[];
     public int size, latency, tag_len, index_len;
     public MainMemory memory;
     public boolean wasDataHit, wasInstHit;
+    int[] dataLRU, instLRU;
 
     //there will be size/4 lines
     //each set has 2 lines
@@ -26,6 +29,8 @@ public class Cache {
         this.tag_len = 16-index_len;
         this.wasDataHit = false;
         this.wasInstHit = false;
+        this.dataLRU = new int[size/8];
+        this.instLRU = new int[size/8];
     }
 
     //Data cache functions
@@ -41,11 +46,14 @@ public class Cache {
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesData[i].valid && cacheLinesData[i].tag == tag) {
                 wasDataHit = true;
+                dataLRU[index] = (i == setStart) ? 0 : 1;
                 System.out.println("Cache Read: Hit");
+                // Statistics.dataHits++;
                 return cacheLinesData[i].data;
             }
         }
         System.out.println("Cache Read: Miss");
+        // Statistics.dataMisses++;
         //call handleCacheMiss() if not present
         wasDataHit = false;
         return handleDataCacheMiss(addr, true);
@@ -59,12 +67,15 @@ public class Cache {
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesData[i].valid && cacheLinesData[i].tag == tag) {
                 cacheLinesData[i].data = value;
+                dataLRU[index] = (i == setStart) ? 0 : 1;
                 memory.setWord(addr, value); //write-through
                 System.out.println("Cache Write: Hit");
+                Statistics.dataHits++;
                 return;
             }
         }
         System.out.println("Cache Write: Miss");
+        Statistics.dataMisses++;
         //call handleCacheMiss() if not present
         handleDataCacheMiss(addr, false);
         cacheDataWrite(addr, value);
@@ -86,11 +97,13 @@ public class Cache {
                 break;
             }
         }
-        if (replacementIndex == -1) replacementIndex = setStart; // fallback
+        if (replacementIndex == -1) replacementIndex = (dataLRU[index] == 1) ? setStart : setStart + 1;
 
         cacheLinesData[replacementIndex].valid = true;
         cacheLinesData[replacementIndex].tag = tag;
         cacheLinesData[replacementIndex].data = value;
+
+        dataLRU[index] = (replacementIndex == setStart) ? 0 : 1;
 
         System.out.println("handleCacheMiss: Put data "+value+" at index "+replacementIndex+" with tag "+tag);
 
@@ -110,11 +123,14 @@ public class Cache {
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesInst[i].valid && cacheLinesInst[i].tag == tag) {
                 wasInstHit = true;
+                instLRU[index] = (i == setStart) ? 0 : 1;
                 System.out.println("Cache Read: Hit");
+                // Statistics.instHits++;
                 return cacheLinesInst[i].data;
             }
         }
         System.out.println("Cache Read: Miss");
+        // Statistics.instMisses++;
         //call handleCacheMiss() if not present
         wasInstHit = false;
         return handleInstCacheMiss(addr, true);
@@ -128,12 +144,15 @@ public class Cache {
         for (int i = setStart; i < setStart + 2; i++) {
             if (cacheLinesInst[i].valid && cacheLinesInst[i].tag == tag) {
                 cacheLinesInst[i].data = value;
+                instLRU[index] = (i == setStart) ? 0 : 1;
                 memory.setWord(addr, value); //write-through
                 System.out.println("Cache Write: Hit");
+                // Statistics.instHits++;
                 return;
             }
         }
         System.out.println("Cache Write: Miss");
+        // Statistics.instMisses++;
         //call handleCacheMiss() if not present
         handleInstCacheMiss(addr, false);
         cacheInstWrite(addr, value);
@@ -155,11 +174,13 @@ public class Cache {
                 break;
             }
         }
-        if (replacementIndex == -1) replacementIndex = setStart; // fallback
+        if (replacementIndex == -1) replacementIndex = (instLRU[index] == 1) ? setStart : setStart + 1;
 
         cacheLinesInst[replacementIndex].valid = true;
         cacheLinesInst[replacementIndex].tag = tag;
         cacheLinesInst[replacementIndex].data = value;
+
+        instLRU[index] = (replacementIndex == setStart) ? 0 : 1;
 
         System.out.println("handleCacheMiss: Put Inst "+value+" at index "+replacementIndex+" with tag "+tag);
 

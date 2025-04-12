@@ -6,6 +6,7 @@ import generic.Element;
 import generic.MemoryReadEvent;
 import generic.MemoryResponseEvent;
 import generic.Simulator;
+import generic.Statistics;
 import processor.Processor;
 import generic.Event;
 
@@ -42,12 +43,11 @@ public class InstructionFetch implements Element{
 			// 		currentPC
 			// 	)
 			// );
-
+			int value = containingProcessor.getCache().cacheInstRead(currentPC);
 			if (containingProcessor.getCache().wasInstHit) {
 				//cache hit: use cache latency and schedule immediate response
 				// System.out.println("MA: Cache HIT at " + EX_MA_Latch.ldAddr + ", value = " + value + ", latency = " + cacheLatency);
 				int cacheLatency = containingProcessor.getCache().latency;
-				int value = containingProcessor.getCache().cacheInstRead(currentPC);
 				Simulator.getEventQueue().addEvent(
 					new MemoryResponseEvent(
 						Clock.getCurrentTime() + cacheLatency,
@@ -57,6 +57,7 @@ public class InstructionFetch implements Element{
 						currentPC
 					)
 				);
+				Statistics.instHits++;
 			} else {
 				//cache miss: use memory latency
 				// System.out.println("MA: Cache MISS at " + EX_MA_Latch.ldAddr + ", scheduling memory read, latency = " + Configuration.mainMemoryLatency);
@@ -68,6 +69,7 @@ public class InstructionFetch implements Element{
 						currentPC
 					)
 				);
+				Statistics.instMisses++;
 			}
 
 			IF_EnableLatch.isIF_busy = true;
@@ -118,7 +120,7 @@ public class InstructionFetch implements Element{
 					)
 				);
 			}
-			
+
 			IF_EnableLatch.isIF_busy = true;
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 			EX_IF_Latch.setIF_enable(false);

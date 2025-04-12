@@ -37,7 +37,7 @@ public class Main {
 		processor.printState(0, 30); // ((0, 0) refers to the range of main memory addresses we wish to print. this is an empty set.
 		
 		// Statistics.printStatistics(args[1]);
-		
+		Statistics.printStatistics("lol.txt");
 		System.out.println("Hash of the Processor State = "+getHashCode(processor.getRegisterFile(), processor.getMainMemory()));
 	}
 	
