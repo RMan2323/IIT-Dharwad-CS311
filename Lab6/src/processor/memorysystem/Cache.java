@@ -154,6 +154,7 @@ public class Cache {
             }
         }
         System.out.println("Cache Write: Miss");
+        wasInstHit = false;
         handleInstCacheMiss(addr, false);
         cacheInstWrite(addr, value);
     }

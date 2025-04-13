@@ -23,14 +23,16 @@ public class Configuration {
 	public static int divider_latency;
 	public static int divider_reciprocal_of_throughput;
 	
-	public static int L1i_numberOfLines;
+	// public static int L1i_numberOfLines;
+	public static int L1i_size;
 	public static int L1i_latency;
-	public static int L1i_associativity;
+	// public static int L1i_associativity;
 	public static String L1i_replacementPolicy;
 	
-	public static int L1d_numberOfLines;
+	// public static int L1d_numberOfLines;
+	public static int L1d_size;
 	public static int L1d_latency;
-	public static int L1d_associativity;
+	// public static int L1d_associativity;
 	public static String L1d_replacementPolicy;
 	
 	public static int L2_numberOfLines;
@@ -78,16 +80,18 @@ public class Configuration {
 		
 		nodeLst = doc.getElementsByTagName("L1iCache");
 		elmnt = (Element) nodeLst.item(0);
-		L1i_numberOfLines = Integer.parseInt(getImmediateString("NumberOfLines", elmnt));
+		// L1i_numberOfLines = Integer.parseInt(getImmediateString("NumberOfLines", elmnt));
+		L1i_size = Integer.parseInt(getImmediateString("Size", elmnt));
 		L1i_latency = Integer.parseInt(getImmediateString("Latency", elmnt));
-		L1i_associativity = Integer.parseInt(getImmediateString("Associativity", elmnt));
+		// L1i_associativity = Integer.parseInt(getImmediateString("Associativity", elmnt));
 		L1i_replacementPolicy = getImmediateString("ReplacementPolicy", elmnt);
 		
 		nodeLst = doc.getElementsByTagName("L1dCache");
 		elmnt = (Element) nodeLst.item(0);
-		L1d_numberOfLines = Integer.parseInt(getImmediateString("NumberOfLines", elmnt));
+		// L1d_numberOfLines = Integer.parseInt(getImmediateString("NumberOfLines", elmnt));
+		L1d_size = Integer.parseInt(getImmediateString("Size", elmnt));
 		L1d_latency = Integer.parseInt(getImmediateString("Latency", elmnt));
-		L1d_associativity = Integer.parseInt(getImmediateString("Associativity", elmnt));
+		// L1d_associativity = Integer.parseInt(getImmediateString("Associativity", elmnt));
 		L1d_replacementPolicy = getImmediateString("ReplacementPolicy", elmnt);
 		
 		nodeLst = doc.getElementsByTagName("L2Cache");

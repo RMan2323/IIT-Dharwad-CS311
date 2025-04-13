@@ -19,16 +19,26 @@
 	</FunctionalUnits>
 	
 	<L1iCache>
-		<NumberOfLines>256</NumberOfLines>
-		<Latency>2</Latency>
-		<Associativity>4</Associativity>
+		<!-- <NumberOfLines>256</NumberOfLines> -->
+
+		<!-- <Size>16</Size> <Latency>1</Latency> -->
+		<!-- <Size>128</Size> <Latency>2</Latency> -->
+		<!-- <Size>512</Size> <Latency>3</Latency> -->
+		<Size>1024</Size> <Latency>4</Latency>
+
+		<!-- <Associativity>4</Associativity> -->
 		<ReplacementPolicy>LRU</ReplacementPolicy>
 	</L1iCache>
 	
 	<L1dCache>
-		<NumberOfLines>256</NumberOfLines>
-		<Latency>2</Latency>
-		<Associativity>4</Associativity>
+		<!-- <NumberOfLines>256</NumberOfLines> -->
+
+		<!-- <Size>16</Size> <Latency>1</Latency> -->
+		<!-- <Size>128</Size> <Latency>2</Latency> -->
+		<Size>512</Size> <Latency>3</Latency>
+		<!-- <Size>1024</Size> <Latency>4</Latency> -->
+		
+		<!-- <Associativity>4</Associativity> -->
 		<ReplacementPolicy>LRU</ReplacementPolicy>
 	</L1dCache>
 	

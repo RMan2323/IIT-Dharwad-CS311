@@ -108,6 +108,7 @@ public class InstructionFetch implements Element{
 						currentPC
 					)
 				);
+				IF_OF_Latch.branchBubble = 0;
 			} else {
 				//cache miss: use memory latency
 				// System.out.println("MA: Cache MISS at " + EX_MA_Latch.ldAddr + ", scheduling memory read, latency = " + Configuration.mainMemoryLatency);

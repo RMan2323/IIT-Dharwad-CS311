@@ -1,0 +1,7 @@
+Number of instructions executed = 12004
+Number of cycles taken = 95036
+Throughput (IPC) = 0.12631004
+Data Hits = 1000
+Data Misses = 2
+Instruction Hits = 0
+Instruction Misses = 11005

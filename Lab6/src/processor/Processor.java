@@ -2,6 +2,7 @@ package processor;
 
 import javax.xml.crypto.Data;
 
+import configuration.Configuration;
 import processor.memorysystem.MainMemory;
 import processor.memorysystem.Cache;
 import processor.pipeline.DataLockUnit;
@@ -47,8 +48,10 @@ public class Processor {
 		mainMemory = new MainMemory();
 
 		//Cache(dataSize, dataLatency, instSize, instLatency)
+
+		this.cache = new Cache(Configuration.L1d_size, Configuration.L1d_latency, Configuration.L1i_size, Configuration.L1i_latency);
 		
-		this.cache = new Cache(1024, 4, 16, 1);
+		// this.cache = new Cache(1024, 4, 16, 1);
 		// this.cache = new Cache(1024, 4, 128, 2);
 		// this.cache = new Cache(1024, 4, 512, 3);
 		// this.cache = new Cache(1024, 4, 1024, 4);
