@@ -1,4 +1,4 @@
-# Lab 0: Understanding Java
+# Lab 0: Understanding Java (National Border Alert Simulation)
 To run the simulator:
 `java softwareSim.java`
 
@@ -15,6 +15,25 @@ To run the assembler:
 * Run the assembler as: `java -Xmx1g -jar <path to assembler> <path to .asm file> <path to .out file>`
 
 # Lab 3: Single Cycle Processor
+To run the processor simulator:
+* Get the binary with `.out` extension
+* Run the simulator as `java -Xmx1g -jar <path to simulator> <path to config.xml> <path to stats file> <path to .out file>`
+
+# Lab 4: Pipelining
+To run the processor simulator:
+* Get the binary with `.out` extension
+* Run the simulator as `java -Xmx1g -jar <path to simulator> <path to config.xml> <path to stats file> <path to .out file>`
+
+# Lab 5: Simulating Latencies
+To change latencies, update the ```config.xml```
+
+To run the processor simulator:
+* Get the binary with `.out` extension
+* Run the simulator as `java -Xmx1g -jar <path to simulator> <path to config.xml> <path to stats file> <path to .out file>`
+
+# Lab 6: Simulating Caches
+To change cache configurations, update the `config.xml`
+
 To run the processor simulator:
 * Get the binary with `.out` extension
 * Run the simulator as `java -Xmx1g -jar <path to simulator> <path to config.xml> <path to stats file> <path to .out file>`
